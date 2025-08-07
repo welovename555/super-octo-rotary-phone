@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All-in-One Tools</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Fonts from Both Projects -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Combined and Refined Styles -->
     <style>
         /* Base Body Style from Message Board Project */
         body {
@@ -80,13 +83,16 @@
 </head>
 <body class="text-gray-200">
 
+    <!-- Global Elements (visible across all tabs) -->
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
     <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50">
         คัดลอกข้อความแล้ว!
     </div>
 
+    <!-- Main Container -->
     <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
 
+        <!-- Navigation Bar -->
         <nav class="flex justify-center items-center gap-2 md:gap-4 mb-8 bg-gray-900/50 p-2 rounded-xl backdrop-blur-sm">
             <button id="btn-address-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg">
                 🔐 สร้างที่อยู่ลับ
@@ -97,6 +103,7 @@
         </nav>
 
         <main>
+            <!-- Tab 1: Address Generator -->
             <section id="address-tab">
                 <div class="text-center mb-8">
                     <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4 pulse-glow">
@@ -156,8 +163,6 @@
                             <select id="addressSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
                                 <option value="home">บ้านไทยสมุทร</option>
                                 <option value="alt1">บ้านปทุม</option>
-                                <option value="บิ๊ก">บิ๊ก</option>
-                                <option value="ลูกค้า ( บิ๊ก )">ลูกค้า ( บิ๊ก )</option>
                             </select>
                         </div>
                         <div>
@@ -192,6 +197,7 @@
                 <div id="statusMessage" class="text-center mt-4 text-sm text-gray-500"></div>
             </section>
 
+            <!-- Tab 2: Message Board -->
             <section id="board-tab">
                  <header class="text-center mb-8 py-8 rounded-2xl shadow-xl bg-gradient-to-r from-cyan-700 via-blue-900 to-indigo-900">
                     <h1 class="text-3xl sm:text-4xl font-bold text-blue-300 hi-tech-glow">บอร์ดข้อความสาธารณะ</h1>
@@ -222,6 +228,9 @@
         </main>
     </div>
 
+    <!-- Scripts -->
+    
+    <!-- Tab Switching Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('main > section');
@@ -261,15 +270,17 @@
         });
     </script>
 
+    <!-- Address Generator Script (wrapped in IIFE to prevent global scope pollution) -->
     <script>
     (() => {
         const ADDRESSES = {
             home: { houseNumber: "62/37", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", road: "ลาดกระบัง", subdistrict: "ราชาเทวะ", district: "บางพลี", province: "สมุทรปราการ", postalCode: "10540" },
-            alt1: { houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", subdistrict: "บางขะแยง", district: "", province: "ปทุมธานี", postalCode: "12000" },
-            'บิ๊ก': { houseNumber: "", soi: "", village: "หอพักใหม่แมนชั่น", road: "", subdistrict: "สันติธรรม", district: "ช้างเผือก", province: "เชียงใหม่", postalCode: "50300" },
-            'ลูกค้า ( บิ๊ก )': { houseNumber: "", soi: "", village: "คอนโดรัชดาเพรสทีจ", road: "", subdistrict: "สามเสนนอก", district: "ห้วยขวาง", province: "กรุงเทพมหานคร", postalCode: "10310" }
+            alt1: { houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", subdistrict: "บางขะแยง", district: "", province: "ปทุมธานี", postalCode: "12000" }
         };
-        const PHONES = { home: "0961408164", alt1: "0946401569", 'บิ๊ก': "", 'ลูกค้า ( บิ๊ก )': "" };
+        const PHONES = { 
+            home: "0961408164", 
+            alt1: "0946401569" 
+        };
         let CURRENT_ADDRESS_KEY = 'home';
         
         document.getElementById('addressSelect').addEventListener('change', (e) => {
@@ -505,6 +516,7 @@
     })();
     </script>
     
+    <!-- Message Board Script (as a module, its scope is naturally isolated) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -660,4 +672,3 @@
     </script>
 </body>
 </html>
-
