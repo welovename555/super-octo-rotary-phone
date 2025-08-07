@@ -376,7 +376,19 @@
                 const showLabel = label && (comp.required || Math.random() > 0.3);
                 const value = comp.type === 'house' ? comp.value : ObfuscationUtils.injectPunctuation(comp.value);
                 let part = showLabel ? `${label} ${value}` : value;
-                if (level === 'extreme' && Math.random() < 0.5) return ObfuscationUtils.addZeroWidthSpaces(part);
+
+                // *** BUG FIX STARTS HERE ***
+                // Apply zero-width space obfuscation only to non-house components to avoid breaking the <mark> tag.
+                if (comp.type !== 'house') {
+                    if (level === 'extreme' && Math.random() < 0.5) {
+                        return ObfuscationUtils.addZeroWidthSpaces(part);
+                    }
+                    if (level === 'high' && Math.random() < 0.3) {
+                        return ObfuscationUtils.addZeroWidthSpaces(part);
+                    }
+                }
+                // *** BUG FIX ENDS HERE ***
+
                 return part.trim();
             }).filter(p => p);
 
