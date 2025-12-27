@@ -48,8 +48,6 @@
 
     /* Cards */
     .panel{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
-
-    /* Metric cards */
     .stats-card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid var(--card-border); border-radius: 12px; box-shadow: var(--inner); }
 
     /* Result */
@@ -59,7 +57,7 @@
     pre#resultDisplay{ font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#c7d2fe; line-height:1.7; }
 
     /* Buttons */
-    .btn{ border:1px solid var(--card-border); border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; }
+    .btn{ border:1px solid var(--card-border); border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; cursor: pointer; }
     .btn:active{ transform: translateY(1px); }
     .btn-primary{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 10px 24px rgba(99,102,241,.25); }
     .btn-primary:hover{ filter: brightness(1.02); box-shadow: 0 14px 28px rgba(99,102,241,.3) }
@@ -67,9 +65,16 @@
     .btn-secondary:hover{ filter: brightness(1.03) }
     .btn-danger{ color:#fff; background: #dc2626; border-color: rgba(239,68,68,.6) }
     .btn-danger:hover{ background:#ef4444 }
+    .btn-ghost{ color:#9ca3af; background: transparent; border-color: transparent; }
+    .btn-ghost:hover{ color:#e5e7eb; background: rgba(255,255,255,0.05); }
 
-    /* Toast */
+    /* Toast & Modal */
     #toast{ background: linear-gradient(90deg, var(--primary), var(--accent)); box-shadow: 0 10px 30px rgba(59,130,246,.35); color:#0b1220; border-radius: 12px; }
+    
+    /* Custom Modal */
+    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+    .modal-content { background: #16223a; border: 1px solid var(--card-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
     /* Board message card */
     .gradient-border{ border-radius: 14px; border:1px solid var(--card-border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); box-shadow: var(--inner); }
@@ -78,13 +83,8 @@
     /* Matrix BG */
     .matrix-bg{ position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
 
-    /* Misc */
-    .hi-tech-glow{ text-shadow: none; }
-    .pulse-glow{ animation: none; }
-
-    /* Override Tailwind colors */
+    /* Utility */
     .text-gray-400{ color: var(--muted) }
-    .text-gray-500{ color: #94a3b8 }
     .bg-gray-800{ background-color: #101a2c }
     .bg-gray-700{ background-color: #16223a }
     .bg-gray-900\/50{ background-color: rgba(2,6,23,.5) }
@@ -92,7 +92,19 @@
 </head>
 <body class="text-gray-200">
   <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-  <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50">คัดลอกข้อความแล้ว!</div>
+  <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50 transition-all duration-300">คัดลอกข้อความแล้ว!</div>
+
+  <div id="confirmModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden modal-backdrop">
+    <div class="modal-content rounded-2xl p-6 max-w-sm w-full mx-4 text-center">
+      <div class="mb-4 text-red-400 text-5xl">⚠️</div>
+      <h3 class="text-xl font-bold text-white mb-2">ยืนยันการลบ?</h3>
+      <p class="text-gray-400 text-sm mb-6">ข้อความนี้จะหายไปถาวรและกู้คืนไม่ได้<br>คุณแน่ใจหรือไม่?</p>
+      <div class="flex gap-3 justify-center">
+        <button id="modalCancelBtn" class="btn btn-ghost w-1/2">ยกเลิก</button>
+        <button id="modalConfirmBtn" class="btn btn-danger w-1/2 shadow-red-900/50 shadow-lg">ยืนยันลบ</button>
+      </div>
+    </div>
+  </div>
 
   <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
 
@@ -106,11 +118,6 @@
         <div class="text-center mb-8">
           <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent mb-4" style="background-image: linear-gradient(90deg, var(--primary), var(--accent));">🔐 โปรแกรมสร้างที่อยู่ลับ</h1>
           <p class="text-gray-400 text-lg mb-4">เครื่องมือสร้างที่อยู่และเบอร์โทรศัพท์แบบสุ่มและพรางตัว</p>
-          <div class="flex flex-wrap justify-center gap-3 text-sm">
-            <span class="px-3 py-1 rounded-full" style="background: rgba(96,165,250,.12); color:#93c5fd">🎲 สุ่มรูปแบบ 1000+ แบบ</span>
-            <span class="px-3 py-1 rounded-full" style="background: rgba(16,185,129,.12); color:#86efac">🛡️ ป้องกันบอท AI</span>
-            <span class="px-3 py-1 rounded-full" style="background: rgba(139,92,246,.12); color:#c4b5fd">⚡ Real‑time</span>
-          </div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -151,7 +158,6 @@
             <div class="text-center text-gray-500 text-sm">ยังไม่มีประวัติ</div>
           </div>
         </div>
-        <div id="statusMessage" class="text-center mt-4 text-sm text-gray-500"></div>
       </section>
 
       <section id="board-tab">
@@ -354,7 +360,7 @@
       navigator.clipboard.writeText(resultText).then(() => {
         stats.copyCount++;
         document.getElementById('copyCount').textContent = stats.copyCount;
-        showToast();
+        showToast('คัดลอกข้อความแล้ว!');
       }).catch(err => {
         console.error('Failed to copy: ', err);
         alert('ไม่สามารถคัดลอกได้');
@@ -369,8 +375,7 @@
     }
 
     function generateNew() { generateRandomAddress(); }
-    function showToast() { const toast = document.getElementById('toast'); toast.classList.remove('opacity-0', 'translate-y-10'); toast.classList.add('opacity-100', 'translate-y-0'); setTimeout(() => { toast.classList.remove('opacity-100', 'translate-y-0'); toast.classList.add('opacity-0', 'translate-y-10'); }, 2000); }
-
+    
     document.getElementById('generateBtn').addEventListener('click', generateNew);
     document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
     document.getElementById('clearBtn').addEventListener('click', clearResult);
@@ -417,6 +422,7 @@
 
     let currentUserId = 'anon';
     let messagesChannel = null;
+    let messageIdToDelete = null; // Store ID to delete
 
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
@@ -425,6 +431,11 @@
     const loadingState = document.getElementById('loading-state');
     const toast = document.getElementById('toast');
     const boardIdDisplay = document.getElementById('board-id-display');
+
+    // Modal Elements
+    const confirmModal = document.getElementById('confirmModal');
+    const modalCancelBtn = document.getElementById('modalCancelBtn');
+    const modalConfirmBtn = document.getElementById('modalConfirmBtn');
 
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -476,20 +487,45 @@
       }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ"); }
     }
 
-    // ฟังก์ชันลบข้อความ (เพิ่มใหม่)
-    async function deleteMessage(messageId) {
-      if (!confirm("⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อความนี้?\n(การกระทำนี้ไม่สามารถกู้คืนได้)")) {
-        return;
-      }
-      try {
-        const { error } = await sb.from('links').delete().eq('id', messageId);
-        if (error) throw error;
-        // ไม่ต้องทำอะไรเพิ่ม Realtime listener จะโหลดหน้าใหม่ให้เอง
-      } catch (error) {
-        console.error("Error deleting message:", error);
-        alert("เกิดข้อผิดพลาดในการลบ: " + error.message);
-      }
+    // Modal Logic
+    function openDeleteModal(id) {
+        messageIdToDelete = id;
+        confirmModal.classList.remove('hidden');
     }
+
+    function closeDeleteModal() {
+        messageIdToDelete = null;
+        confirmModal.classList.add('hidden');
+    }
+
+    modalCancelBtn.onclick = closeDeleteModal;
+
+    modalConfirmBtn.onclick = async () => {
+        if (messageIdToDelete) {
+            // UI Feedback: เปลี่ยนข้อความปุ่มให้รู้ว่ากำลังทำ
+            const originalText = modalConfirmBtn.innerText;
+            modalConfirmBtn.innerText = "กำลังลบ...";
+            
+            try {
+                const { error } = await sb.from('links').delete().eq('id', messageIdToDelete);
+                if (error) throw error;
+                
+                showToast("ลบข้อความเรียบร้อย!");
+                closeDeleteModal();
+            } catch (error) {
+                console.error("Delete Error:", error);
+                // เช็คว่าเป็นเพราะ Permission หรือไม่
+                if(error.code === "42501" || error.message.includes("policy")) {
+                   alert("❌ ลบไม่ได้: สิทธิ์ไม่เพียงพอ\nกรุณาตั้งค่า Supabase Policy ให้รองรับการลบ (DELETE) สำหรับ anon");
+                } else {
+                   alert("เกิดข้อผิดพลาดในการลบ: " + error.message);
+                }
+            } finally {
+                modalConfirmBtn.innerText = originalText;
+                closeDeleteModal();
+            }
+        }
+    };
 
     function renderMessages(messages){
       messagesContainer.innerHTML='';
@@ -515,8 +551,10 @@
       div.innerHTML = content;
       div.querySelector('.copy-button').onclick = (e) => { copyTextToClipboard(msg.text, e.target); };
       div.querySelector('.pin-button').onclick = () => { togglePinMessage(msg.id); };
-      // ผูกปุ่มลบกับฟังก์ชัน deleteMessage
-      div.querySelector('.delete-button').onclick = () => { deleteMessage(msg.id); };
+      
+      // เปลี่ยนตรงนี้เป็นเรียก Modal แทน
+      div.querySelector('.delete-button').onclick = () => { openDeleteModal(msg.id); };
+      
       return div;
     }
 
@@ -531,7 +569,15 @@
       if (upErr){ console.error('togglePin update error:', upErr); }
     }
 
-    function showToast(){ toast.classList.remove('opacity-0','translate-y-10'); toast.classList.add('opacity-100','translate-y-0'); setTimeout(() => { toast.classList.remove('opacity-100','translate-y-0'); toast.classList.add('opacity-0','translate-y-10'); }, 2000); }
+    function showToast(msg = 'คัดลอกข้อความแล้ว!'){ 
+        toast.textContent = msg;
+        toast.classList.remove('opacity-0','translate-y-10'); 
+        toast.classList.add('opacity-100','translate-y-0'); 
+        setTimeout(() => { 
+            toast.classList.remove('opacity-100','translate-y-0'); 
+            toast.classList.add('opacity-0','translate-y-10'); 
+        }, 2000); 
+    }
     function copyTextToClipboard(text, button){ navigator.clipboard.writeText(text).then(() => { showToast(); if (button){ button.textContent = 'สำเร็จ!'; setTimeout(() => { button.textContent = 'คัดลอก'; }, 2000); } }).catch(err => { console.error('Failed to copy text: ', err); }); }
 
     main();
