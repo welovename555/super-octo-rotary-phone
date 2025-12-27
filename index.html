@@ -207,17 +207,37 @@
 
   <script>
   (() => {
+    // --- UPDATE: เพิ่มที่อยู่ แน้ค, มินท์, เฟิร์ส ตรงนี้ ---
     const ADDRESSES = {
       home: { houseNumber: "82/7", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", road: "ลาดกระบัง", subdistrict: "ราชาเทวะ", district: "บางพลี", province: "สมุทรปราการ", postalCode: "10540" },
-      alt1: { houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", subdistrict: "บางขะแยง", district: "", province: "ปทุมธานี", postalCode: "12000" }
+      alt1: { houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", subdistrict: "บางขะแยง", district: "", province: "ปทุมธานี", postalCode: "12000" },
+      // 1. แน้ค
+      nack: { houseNumber: "42/3", soi: "ลาดกระบัง14/1", village: "ไทยสมุทรอพาร์ทเมน", road: "", subdistrict: "ราชาเทวะ", district: "บางพลี", province: "สมุทรปราการ", postalCode: "10540" },
+      // 2. มินท์ (แปลงเป็นไทยเพื่อความสวยงามใน V1/V2)
+      mint: { houseNumber: "1400", soi: "อ่อนนุช 42", village: "หอพักวงศ์กิตติพร แมนชั่น", road: "อ่อนนุช", subdistrict: "สวนหลวง", district: "สวนหลวง", province: "กรุงเทพมหานคร", postalCode: "10250" },
+      // 3. เฟิร์ส (เติมรหัสไปรษณีย์ลาดกระบัง 10520 ให้ เพื่อให้ฟอร์แมตไม่แหว่ง)
+      first: { houseNumber: "1008", soi: "ลาดกระบัง 34/6", village: "หมู่บ้าน บ.ลาดกระบังการ์เด้นท์", road: "ลาดกระบัง", subdistrict: "ลาดกระบัง", district: "ลาดกระบัง", province: "กรุงเทพมหานคร", postalCode: "10520" }
     };
-    const PHONES = { home: "0951698770", alt1: "0946401569" };
+    
+    // --- UPDATE: เพิ่มเบอร์โทร (ถ้าไม่มีให้ใส่ว่างไว้ ระบบจะซ่อนเอง) ---
+    const PHONES = { 
+      home: "0951698770", 
+      alt1: "0946401569",
+      nack: "0820571500", // เบอร์แน้ค
+      mint: "",          // ไม่ระบุ
+      first: ""          // ไม่ระบุ
+    };
  
     let CURRENT_ADDRESS_KEY = 'home';
 
-    document.getElementById('addressSelect').innerHTML = '<option value="home">บ้านไทยสมุทร</option><option value="alt1">บ้านปทุม</option>';
+    // --- UPDATE: เพิ่มตัวเลือกใน Dropdown ---
+    document.getElementById('addressSelect').innerHTML = 
+      '<option value="home">บ้านไทยสมุทร</option>' + 
+      '<option value="alt1">บ้านปทุม</option>' +
+      '<option value="nack">📍 ที่อยู่แน้ค</option>' +
+      '<option value="mint">📍 ที่อยู่มินท์</option>' +
+      '<option value="first">📍 ที่อยู่เฟิร์ส</option>';
     
-    // UPDATED: เพิ่มตัวเลือก V.1 และ V.2
     document.getElementById('obfuscationSelect').innerHTML = 
     '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
     '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
@@ -237,8 +257,8 @@
       soi: ['ซอย', 'ซ.', 'Soi', ''],
       village: ['หมู่บ้าน', 'ม.', 'หมู่', ''],
       road: ['ถนน', 'ถ.', 'Rd.', ''],
-      subdistrict: ['ตำบล', 'ต.', ''],
-      district: ['อำเภอ', 'อ.', ''],
+      subdistrict: ['ตำบล', 'ต.', 'แขวง'],
+      district: ['อำเภอ', 'อ.', 'เขต'],
       province: ['จังหวัด', 'จ.', ''],
       postal: ['รหัสไปรษณีย์', 'รหัส', 'Zip', '']
     };
@@ -292,7 +312,6 @@
       const selectedAddress = ADDRESSES[CURRENT_ADDRESS_KEY];
       const selectedPhone = PHONES[CURRENT_ADDRESS_KEY];
       
-      // ตรวจสอบว่าเป็นโหมด V1 หรือ V2 หรือไม่
       const isNewMode = (level === 'v1' || level === 'v2');
 
       const postal = (!isNewMode && Math.random() < 0.5) ? ObfuscationUtils.toThaiNumerals(selectedAddress.postalCode) : selectedAddress.postalCode;
@@ -313,7 +332,6 @@
       
       if (isNewMode) {
           // --- LOGIC ใหม่สำหรับ V.1 และ V.2 ---
-          // บังคับลำดับ: บ้าน -> เบอร์ -> (อื่นๆ) -> ไปรษณีย์
           const house = allComponents.find(c => c.type === 'house');
           const phone = allComponents.find(c => c.type === 'phone');
           const postal = allComponents.find(c => c.type === 'postal');
@@ -324,13 +342,12 @@
               // V.2: สลับตำแหน่งส่วนที่อยู่ตรงกลาง
               others = others.sort(() => 0.5 - Math.random());
           }
-          // V.1: ไม่สลับ (others จะเรียงตาม Array เริ่มต้น คือ ซอย -> หมู่บ้าน -> ถนน...)
 
           componentsToUse = [];
           if(house) componentsToUse.push(house);
           if(phone) componentsToUse.push(phone);
           componentsToUse = componentsToUse.concat(others);
-          if(postal) componentsToUse.push(postal); // รหัสไปรษณีย์อยู่ท้ายสุดเสมอ
+          if(postal) componentsToUse.push(postal);
 
       } else {
           // --- LOGIC เดิม (Low-Extreme) ---
@@ -344,14 +361,11 @@
         let labelPool = comp.labelPool;
         let label = labelPool[Math.floor(Math.random() * labelPool.length)];
         
-        // ถ้าไม่ใช่ V1/V2 ให้สุ่มโอกาสใช้ FuzzyLabels (ภาษาต่างดาว)
         if (!isNewMode && Math.random() < 0.4 && FuzzyLabels[comp.type]?.length > 0) {
           label = FuzzyLabels[comp.type][Math.floor(Math.random() * FuzzyLabels[comp.type].length)];
         }
 
         const showLabel = label && (comp.required || Math.random() > 0.3);
-        
-        // ถ้าเป็น V1/V2 ไม่ต้องใส่จุดประหลาด (injectPunctuation)
         const value = (comp.type === 'house' || isNewMode) ? comp.value : ObfuscationUtils.injectPunctuation(comp.value);
         
         let part = showLabel ? `${label} ${value}` : value;
@@ -366,7 +380,6 @@
       let lineStr = '';
       for (let i = 0; i < formattedParts.length; i++) {
         if (i > 0) {
-          // ถ้าเป็น V.1/V.2 ให้ใช้การเว้นวรรคยาวๆ (4 เคาะ) แทน comma
           const sep = isNewMode ? '    ' : Separators[Math.floor(Math.random() * Separators.length)];
           lineStr += sep; 
         }
