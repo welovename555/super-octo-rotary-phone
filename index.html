@@ -1,256 +1,86 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All-in-One Tools — Reskin</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root{
-      --bg: #0b1220;
-      --bg-2: #0f172a;
-      --surface: #121a2b;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --primary: #60a5fa;
-      --primary-strong: #3b82f6;
-      --accent: #8b5cf6;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --card-border: rgba(148,163,184,.18);
-      --soft-shadow: 0 10px 24px rgba(2,6,23,.35);
-      --inner: inset 0 1px 0 rgba(255,255,255,.03);
-      --radius: 16px;
-    }
-
-    body{
-      font-family: 'Sarabun', system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Thai", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(900px 600px at 10% -10%, #0f1a33 0%, transparent 60%),
-        radial-gradient(800px 500px at 110% 10%, #101c3a 0%, transparent 55%),
-        var(--bg);
-      min-height: 100vh;
-    }
-
-    /* Nav Tabs */
-    .tab-button{ color:#a3adc2; border:1px solid transparent; background: transparent; transition: all .2s ease; }
-    .tab-button:hover{ color:#e5e7eb; background: rgba(255,255,255,.04); border-color: rgba(148,163,184,.2); }
-    .tab-button.active-tab{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 8px 20px rgba(59,130,246,.30); }
-
-    /* Cards */
-    .panel{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
-    .stats-card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid var(--card-border); border-radius: 12px; box-shadow: var(--inner); }
-
-    /* Result */
-    .result-box{ position: relative; overflow: hidden; background: var(--surface); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
-    .result-box::before{ content:""; position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(96,165,250,.09), transparent); transform: translateX(-100%); animation: shimmer 3.5s infinite; }
-    @keyframes shimmer{ 0%{ transform: translateX(-100%) } 100%{ transform: translateX(100%) }}
-    pre#resultDisplay{ font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#c7d2fe; line-height:1.7; }
-    
-    /* Highlight styles inside result */
-    .house-highlight { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0 4px; border-radius: 4px; }
-
-    /* Buttons */
-    .btn{ border:1px solid var(--card-border); border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; cursor: pointer; }
-    .btn:active{ transform: translateY(1px); }
-    .btn-primary{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 10px 24px rgba(99,102,241,.25); }
-    .btn-primary:hover{ filter: brightness(1.02); box-shadow: 0 14px 28px rgba(99,102,241,.3) }
-    .btn-secondary{ color:#0b1220; background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 10px 24px rgba(16,185,129,.22); }
-    .btn-secondary:hover{ filter: brightness(1.03) }
-    .btn-danger{ color:#fff; background: #dc2626; border-color: rgba(239,68,68,.6) }
-    .btn-danger:hover{ background:#ef4444 }
-    .btn-ghost{ color:#9ca3af; background: transparent; border-color: transparent; }
-    .btn-ghost:hover{ color:#e5e7eb; background: rgba(255,255,255,0.05); }
-
-    /* Toast & Modal */
-    #toast{ background: linear-gradient(90deg, var(--primary), var(--accent)); box-shadow: 0 10px 30px rgba(59,130,246,.35); color:#0b1220; border-radius: 12px; }
-    
-    /* Custom Modal */
-    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
-    .modal-content { background: #16223a; border: 1px solid var(--card-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-
-    /* Board message card */
-    .gradient-border{ border-radius: 14px; border:1px solid var(--card-border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); box-shadow: var(--inner); }
-    .pinned-message { border: 2px solid var(--primary); background: linear-gradient(180deg, rgba(96,165,250,.1), rgba(96,165,250,.05)); }
-
-    /* Matrix BG */
-    .matrix-bg{ position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
-
-    /* Utility */
-    .text-gray-400{ color: var(--muted) }
-    .bg-gray-800{ background-color: #101a2c }
-    .bg-gray-700{ background-color: #16223a }
-    .bg-gray-900\/50{ background-color: rgba(2,6,23,.5) }
-  </style>
-</head>
-<body class="text-gray-200">
-  <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-  <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50 transition-all duration-300">คัดลอกข้อความแล้ว!</div>
-
-  <div id="confirmModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden modal-backdrop">
-    <div class="modal-content rounded-2xl p-6 max-w-sm w-full mx-4 text-center">
-      <div class="mb-4 text-red-400 text-5xl">⚠️</div>
-      <h3 class="text-xl font-bold text-white mb-2">ยืนยันการลบ?</h3>
-      <p class="text-gray-400 text-sm mb-6">ข้อความนี้จะหายไปถาวรและกู้คืนไม่ได้<br>คุณแน่ใจหรือไม่?</p>
-      <div class="flex gap-3 justify-center">
-        <button id="modalCancelBtn" class="btn btn-ghost w-1/2">ยกเลิก</button>
-        <button id="modalConfirmBtn" class="btn btn-danger w-1/2 shadow-red-900/50 shadow-lg">ยืนยันลบ</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-
-    <nav class="flex justify-center items-center gap-2 md:gap-4 mb-8 bg-gray-900/50 p-2 rounded-xl backdrop-blur-sm panel">
-      <button id="btn-address-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg">🔐 สร้างที่อยู่ลับ</button>
-      <button id="btn-board-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg">💬 บอร์ดข้อความ</button>
-    </nav>
-
-    <main>
-      <section id="address-tab">
-        <div class="text-center mb-8">
-          <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent mb-4" style="background-image: linear-gradient(90deg, var(--primary), var(--accent));">🔐 โปรแกรมสร้างที่อยู่ลับ</h1>
-          <p class="text-gray-400 text-lg mb-4">เครื่องมือสร้างที่อยู่และเบอร์โทรศัพท์แบบสุ่มและพรางตัว</p>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-blue-400" id="generateCount">0</div><div class="text-xs text-gray-400">ครั้งที่สร้าง</div></div>
-          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-green-400" id="copyCount">0</div><div class="text-xs text-gray-400">ครั้งที่คัดลอก</div></div>
-          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-purple-400" id="currentVariation">A1</div><div class="text-xs text-gray-400">รูปแบบปัจจุบัน</div></div>
-          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-yellow-400" id="obfuscationLevel">🔒</div><div class="text-xs text-gray-400">ระดับการพราง</div></div>
-        </div>
-
-        <div class="result-box p-6 mb-6 relative">
-          <div class="absolute top-4 right-4 text-xs text-gray-500" id="generationTime"></div>
-          <pre id="resultDisplay" class="text-sm md:text-base leading-relaxed whitespace-pre-wrap min-h-[200px] overflow-x-auto"></pre>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <button id="generateBtn" class="btn btn-primary text-lg">🎲 สร้างใหม่</button>
-          <button id="copyBtn" class="btn btn-secondary text-lg">📋 คัดลอก</button>
-          <button id="clearBtn" class="btn btn-danger text-lg">🗑️ ล้างข้อมูล</button>
-        </div>
-
-        <div class="panel rounded-xl p-6 mb-6">
-          <h3 class="text-xl font-bold mb-4 text-center">⚙️ การตั้งค่าขั้นสูง</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label for="addressSelect" class="block text-sm font-medium mb-2">เลือกที่อยู่</label>
-              <select id="addressSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
-            </div>
-            <div>
-              <label for="obfuscationSelect" class="block text-sm font-medium mb-2">ระดับการพรางตัว</label>
-              <select id="obfuscationSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel rounded-xl p-6">
-          <h3 class="text-xl font-bold mb-4 text-center">📚 ประวัติการสร้าง (5 ครั้งล่าสุด)</h3>
-          <div id="historyContainer" class="space-y-2 max-h-60 overflow-y-auto">
-            <div class="text-center text-gray-500 text-sm">ยังไม่มีประวัติ</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="board-tab">
-        <header class="text-center mb-8 py-8 rounded-2xl panel">
-          <h1 class="text-3xl sm:text-4xl font-bold" style="background-image: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; background-clip:text; color: transparent;">บอร์ดข้อความสาธารณะ</h1>
-          <p class="text-gray-200 mt-2">โพสต์ข้อความเพื่อให้ทุกคนเห็นได้ทันที</p>
-          <div class="mt-4 text-sm" style="color:#93c5fd"><span>ID บอร์ด: </span><span id="board-id-display" class="font-mono bg-gray-800 p-1 rounded shadow-inner"></span></div>
-        </header>
-
-        <div class="p-6 rounded-2xl shadow-2xl mb-8 gradient-border">
-          <form id="message-form">
-            <label for="title-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">หัวข้อ/ชื่อไฟล์:</label>
-            <input id="title-input" type="text" class="w-full p-3 mb-3 bg-[#16223a] text-cyan-200 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่หัวข้อหรือชื่อไฟล์..." />
-            <label for="message-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">ข้อความของคุณ:</label>
-            <textarea id="message-input" rows="4" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
-            <button type="submit" id="post-button" class="mt-4 w-full btn btn-primary">โพสต์ข้อความ</button>
-          </form>
-        </div>
-
-        <div id="messages-container" class="space-y-4">
-          <div id="loading-state" class="text-center py-10"><p class="text-gray-400">กำลังโหลดข้อความ...</p></div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    // Tab Switching Logic
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('main > section');
-      const buttons = document.querySelectorAll('nav button');
-      function switchTab(tabId) {
-        tabs.forEach(tab => tab.classList.add('hidden'));
-        const activeTab = document.getElementById(tabId);
-        if (activeTab) activeTab.classList.remove('hidden');
-        buttons.forEach(button => button.classList.remove('active-tab'));
-        const activeButton = document.getElementById(`btn-${tabId}`);
-        if (activeButton) activeButton.classList.add('active-tab');
-      }
-      buttons.forEach(button => button.addEventListener('click', () => switchTab(button.id.replace('btn-',''))));
-      switchTab('address-tab');
-    });
-  </script>
-
   <script>
   (() => {
-    // --- UPDATE: เพิ่มที่อยู่ แน้ค, มินท์, เฟิร์ส ตรงนี้ ---
-    const ADDRESSES = {
-      home: { houseNumber: "82/7", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", road: "ลาดกระบัง", subdistrict: "ราชาเทวะ", district: "บางพลี", province: "สมุทรปราการ", postalCode: "10540" },
-      alt1: { houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", subdistrict: "บางขะแยง", district: "", province: "ปทุมธานี", postalCode: "12000" },
-      // 1. แน้ค
-      nack: { houseNumber: "42/3", soi: "ลาดกระบัง14/1", village: "ไทยสมุทรอพาร์ทเมน", road: "", subdistrict: "ราชาเทวะ", district: "บางพลี", province: "สมุทรปราการ", postalCode: "10540" },
-      // 2. มินท์ (แปลงเป็นไทยเพื่อความสวยงามใน V1/V2)
-      mint: { houseNumber: "1400", soi: "อ่อนนุช 42", village: "หอพักวงศ์กิตติพร แมนชั่น", road: "อ่อนนุช", subdistrict: "สวนหลวง", district: "สวนหลวง", province: "กรุงเทพมหานคร", postalCode: "10250" },
-      // 3. เฟิร์ส (เติมรหัสไปรษณีย์ลาดกระบัง 10520 ให้ เพื่อให้ฟอร์แมตไม่แหว่ง)
-      first: { houseNumber: "1008", soi: "ลาดกระบัง 34/6", village: "หมู่บ้าน บ.ลาดกระบังการ์เด้นท์", road: "ลาดกระบัง", subdistrict: "ลาดกระบัง", district: "ลาดกระบัง", province: "กรุงเทพมหานคร", postalCode: "10520" }
-    };
+    // ==========================================
+    // 1. ส่วนตั้งค่าข้อมูล (DATA CONFIGURATION)
+    // ==========================================
     
-    // --- UPDATE: เพิ่มเบอร์โทร (ถ้าไม่มีให้ใส่ว่างไว้ ระบบจะซ่อนเอง) ---
+    const ADDRESSES = {
+      home: { 
+        houseNumber: "82/7", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", 
+        road: "ลาดกระบัง", road_en: "Lat Krabang Rd.",
+        subdistrict: "ราชาเทวะ", subdistrict_en: "Racha Thewa",
+        district: "บางพลี", district_en: "Bang Phli",
+        province: "สมุทรปราการ", province_en: "Samut Prakan",
+        postalCode: "10540" 
+      },
+      alt1: { 
+        houseNumber: "22/4", soi: "ใจเอื้อ 2", village: "", road: "", 
+        subdistrict: "บางขะแยง", subdistrict_en: "Bang Khayaeng",
+        district: "เมือง", district_en: "Mueang",
+        province: "ปทุมธานี", province_en: "Pathum Thani",
+        postalCode: "12000" 
+      },
+      nack: { 
+        houseNumber: "42/3", soi: "ลาดกระบัง14/1", village: "ไทยสมุทรอพาร์ทเมน", road: "", 
+        subdistrict: "ราชาเทวะ", subdistrict_en: "Racha Thewa",
+        district: "บางพลี", district_en: "Bang Phli",
+        province: "สมุทรปราการ", province_en: "Samut Prakan",
+        postalCode: "10540" 
+      },
+      mint: { 
+        houseNumber: "1400", soi: "อ่อนนุช 42", 
+        village: "หอพักวงศ์กิตติพร แมนชั่น", // หอพักต้องมาเสมอ
+        road: "อ่อนนุช", road_en: "On Nut Rd.",
+        subdistrict: "สวนหลวง", subdistrict_en: "Suan Luang",
+        district: "สวนหลวง", district_en: "Suan Luang",
+        province: "กรุงเทพมหานคร", province_en: "Bangkok",
+        postalCode: "10250" 
+      },
+      first: { 
+        houseNumber: "1008", soi: "ลาดกระบัง 34/6", village: "หมู่บ้าน บ.ลาดกระบังการ์เด้นท์", 
+        road: "ลาดกระบัง", road_en: "Lat Krabang Rd.",
+        subdistrict: "ลาดกระบัง", subdistrict_en: "Lat Krabang",
+        district: "ลาดกระบัง", district_en: "Lat Krabang",
+        province: "กรุงเทพมหานคร", province_en: "Bangkok",
+        postalCode: "10520" 
+      }
+    };
+
     const PHONES = { 
       home: "0951698770", 
       alt1: "0946401569",
-      nack: "0820571500", // เบอร์แน้ค
-      mint: "",          // ไม่ระบุ
-      first: ""          // ไม่ระบุ
+      nack: "0820571500", 
+      mint: "0959936570", // เพิ่มเบอร์มิ้นท์
+      first: "" 
     };
- 
+
     let CURRENT_ADDRESS_KEY = 'home';
 
-    // --- UPDATE: เพิ่มตัวเลือกใน Dropdown ---
+    // อัปเดตตัวเลือก Dropdown
     document.getElementById('addressSelect').innerHTML = 
       '<option value="home">บ้านไทยสมุทร</option>' + 
       '<option value="alt1">บ้านปทุม</option>' +
       '<option value="nack">📍 ที่อยู่แน้ค</option>' +
       '<option value="mint">📍 ที่อยู่มินท์</option>' +
       '<option value="first">📍 ที่อยู่เฟิร์ส</option>';
-    
+      
     document.getElementById('obfuscationSelect').innerHTML = 
-    '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
-    '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
-    '<option value="low">🟢 ต่ำ - อ่านง่าย</option>' +
-    '<option value="medium" selected>🟡 กลาง - สมดุล</option>' +
-    '<option value="high">🔴 สูง - พรางหนัก</option>' +
-    '<option value="extreme">⚫ สุดขั้น - เกือบไม่อ่านออก</option>';
+      '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
+      '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
+      '<option value="low">🟢 ต่ำ - อ่านง่าย</option>' +
+      '<option value="medium" selected>🟡 กลาง - สมดุล</option>' +
+      '<option value="high">🔴 สูง - พรางหนัก</option>' +
+      '<option value="extreme">⚫ สุดขั้น - เกือบไม่อ่านออก</option>';
 
     document.getElementById('addressSelect').addEventListener('change', (e) => { CURRENT_ADDRESS_KEY = e.target.value; generateNew(); });
 
     let stats = { generateCount: 0, copyCount: 0 };
     let history = [];
     
+    // ==========================================
+    // 2. ส่วนคำศัพท์และตัวช่วย (UTILS)
+    // ==========================================
+
     const Labels = {
       house: ['บ้านเลขที่', 'เลขที่', 'เลขที่บ้าน', 'House No.', 'Address No.', 'Addr. No.', 'Unit', '#', ''],
       phone: ['โทรศัพท์', 'โทร', 'เบอร์', 'เบอร์โทร', 'Tel', 'Tel.', 'Mobile', 'Contact', 'Contact No.', ''],
@@ -262,7 +92,7 @@
       province: ['จังหวัด', 'จ.', ''],
       postal: ['รหัสไปรษณีย์', 'รหัส', 'Zip', '']
     };
-    
+
     const FuzzyLabels = {
       house: ['บ้านเลๅที่', 'บ้านเลซที่', 'บ้านเxขที่', 'บ้าuเลขที่', 'บๅนเลขที่', 'บ้ๅนเลxที่', 'บาuเลขที่', 'lบๅนเลข', 'H0use No.', 'H๐use', 'Addr. No.', 'Lบ้าน'],
       phone: ['โทsัพท์', 'โทรsัsท์', 'โทpศัพ', 'โทรsับ', 'เboร์', 'lเบoร์', 'เbอร์', 'โทs', 'T℮l', 'Mob1le', 'C0ntact', 'Tel.'],
@@ -274,8 +104,9 @@
       province: ['จังหว้ด', 'จัnหวัด', 'จัJหวัด'],
       postal: ['รหัสไปsษณีย์', 'รหัnไปรษณีย์', 'รหัสไpรษณีย์']
     };
+
     const Separators = [', ', ' ', '  ', '   ', '. ', ' - '];
-    
+
     const ObfuscationUtils = {
       Punctuation: ['.', ',', '/', '-', '_'],
       toThaiNumerals: (str) => str.replace(/[0-9]/g, (d) => '๐๑๒๓๔๕๖๗๘๙'[d]),
@@ -306,6 +137,10 @@
       generateVariationCode: () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)] + '0123456789'[Math.floor(Math.random() * 10)]
     };
 
+    // ==========================================
+    // 3. ส่วนสร้างที่อยู่ (CORE LOGIC)
+    // ==========================================
+
     function generateRandomAddress() {
       const startTime = Date.now();
       const level = document.getElementById('obfuscationSelect').value;
@@ -313,55 +148,89 @@
       const selectedPhone = PHONES[CURRENT_ADDRESS_KEY];
       
       const isNewMode = (level === 'v1' || level === 'v2');
-
       const postal = (!isNewMode && Math.random() < 0.5) ? ObfuscationUtils.toThaiNumerals(selectedAddress.postalCode) : selectedAddress.postalCode;
+
+      // --- Logic การสุ่มภาษา (Thai vs English) ---
+      // chance = 0.4 คือมีโอกาส 40% ที่จะใช้ภาษาอังกฤษในส่วนนั้นๆ
+      function pickLang(thaiVal, engVal, type, chance = 0.4) {
+        if (!engVal) return { value: thaiVal, isEng: false }; // ถ้าไม่มีอังกฤษ ให้ใช้ไทย
+        if (Math.random() < chance) {
+           return { value: engVal, isEng: true };
+        }
+        return { value: thaiVal, isEng: false };
+      }
+
+      // เตรียมข้อมูลแต่ละส่วน (สุ่มภาษาแยกกัน เพื่อให้เกิดการผสม)
+      const roadData = pickLang(selectedAddress.road, selectedAddress.road_en, 'road');
+      const subData = pickLang(selectedAddress.subdistrict, selectedAddress.subdistrict_en, 'subdistrict');
+      const distData = pickLang(selectedAddress.district, selectedAddress.district_en, 'district');
+      const provData = pickLang(selectedAddress.province, selectedAddress.province_en, 'province');
+
+      // ถ้าเป็นภาษาอังกฤษ เรามักจะไม่ใส่คำนำหน้า (เช่น แขวง/เขต) หรือใส่เป็น Comma แทน
+      const getLabelPool = (originalPool, isEng) => {
+         if(isEng) return ['']; // ถ้าอังกฤษ ให้ Label ว่างไว้ (ฝรั่งไม่ใส่ จ./อ. นำหน้า)
+         return originalPool;
+      };
 
       const allComponents = [
         { type:'house', value: isNewMode ? selectedAddress.houseNumber : `<mark class="house-highlight">${ObfuscationUtils.formatNumber(selectedAddress.houseNumber)}</mark>`, labelPool: Labels.house, required: !!selectedAddress.houseNumber },
         { type:'phone', value: ObfuscationUtils.formatPhone(selectedPhone), labelPool: Labels.phone, required: !!selectedPhone },
+        
         { type:'soi', value: selectedAddress.soi, labelPool: Labels.soi },
-        { type:'village', value: selectedAddress.village, labelPool: Labels.village },
-        { type:'road', value: selectedAddress.road, labelPool: Labels.road },
-        { type:'subdistrict', value: selectedAddress.subdistrict, labelPool: Labels.subdistrict },
-        { type:'district', value: selectedAddress.district, labelPool: Labels.district },
-        { type:'province', value: selectedAddress.province, labelPool: Labels.province },
+        
+        // *** สำคัญ: ตั้ง required เป็น true ถ้ามีชื่อหอพัก/หมู่บ้าน (ทำให้ของมิ้นท์ไม่หาย) ***
+        { type:'village', value: selectedAddress.village, labelPool: Labels.village, required: !!selectedAddress.village },
+        
+        // ใช้ข้อมูลที่ผ่านการสุ่มภาษาแล้ว
+        { type:'road', value: roadData.value, labelPool: getLabelPool(Labels.road, roadData.isEng) },
+        { type:'subdistrict', value: subData.value, labelPool: getLabelPool(Labels.subdistrict, subData.isEng) },
+        { type:'district', value: distData.value, labelPool: getLabelPool(Labels.district, distData.isEng) },
+        { type:'province', value: provData.value, labelPool: getLabelPool(Labels.province, provData.isEng) },
+        
         { type:'postal', value: postal, labelPool: Labels.postal }
       ].filter(c => c.value && String(c.value).replace(/<[^>]*>/g, '').trim() !== '');
 
       let componentsToUse;
       
       if (isNewMode) {
-          // --- LOGIC ใหม่สำหรับ V.1 และ V.2 ---
+          // --- Logic V1/V2 ---
           const house = allComponents.find(c => c.type === 'house');
           const phone = allComponents.find(c => c.type === 'phone');
           const postal = allComponents.find(c => c.type === 'postal');
-          
+          // เอาส่วนอื่นๆ มารวมกัน
           let others = allComponents.filter(c => c.type !== 'house' && c.type !== 'phone' && c.type !== 'postal');
-
+          
           if (level === 'v2') {
-              // V.2: สลับตำแหน่งส่วนที่อยู่ตรงกลาง
+              // V2: สลับตำแหน่งส่วนอื่นๆ (เช่น ซอย, ถนน, หอพัก)
               others = others.sort(() => 0.5 - Math.random());
           }
 
           componentsToUse = [];
           if(house) componentsToUse.push(house);
-          if(phone) componentsToUse.push(phone);
+          if(phone) componentsToUse.push(phone); // เบอร์โทรต่อท้ายบ้านเลขที่
           componentsToUse = componentsToUse.concat(others);
-          if(postal) componentsToUse.push(postal);
+          if(postal) componentsToUse.push(postal); // รหัสไปรษณีย์ปิดท้าย
 
       } else {
-          // --- LOGIC เดิม (Low-Extreme) ---
+          // --- Logic เดิม (Low - Extreme) ---
           const required = allComponents.filter(c => c.required);
           const optional = allComponents.filter(c => !c.required);
+          
+          // สุ่มจำนวน optional ที่จะนำมาแสดง (แต่ village เป็น required แล้ว ดังนั้นหอพักจะไม่ถูกสุ่มทิ้ง)
           const numOptionalToUse = Math.floor(Math.random() * (optional.length - 2)) + 3;
+          
           componentsToUse = [...required, ...optional.sort(() => 0.5 - Math.random()).slice(0, numOptionalToUse)].sort(() => 0.5 - Math.random());
       }
 
+      // สร้าง String สุดท้าย
       const formattedParts = componentsToUse.map(comp => {
         let labelPool = comp.labelPool;
         let label = labelPool[Math.floor(Math.random() * labelPool.length)];
         
-        if (!isNewMode && Math.random() < 0.4 && FuzzyLabels[comp.type]?.length > 0) {
+        // เช็คว่าเป็น Label ภาษาอังกฤษไหม (ถ้าว่างคืออังกฤษ) ถ้าอังกฤษไม่ต้องใช้ Fuzzy
+        const isEnglishLabel = (label === ''); 
+
+        if (!isNewMode && !isEnglishLabel && Math.random() < 0.4 && FuzzyLabels[comp.type]?.length > 0) {
           label = FuzzyLabels[comp.type][Math.floor(Math.random() * FuzzyLabels[comp.type].length)];
         }
 
@@ -370,6 +239,7 @@
         
         let part = showLabel ? `${label} ${value}` : value;
 
+        // ใส่ Zero Width Space ในโหมด High/Extreme
         if (comp.type !== 'house' && !isNewMode){
           if (level === 'extreme' && Math.random() < 0.5) return ObfuscationUtils.addZeroWidthSpaces(part);
           if (level === 'high' && Math.random() < 0.3) return ObfuscationUtils.addZeroWidthSpaces(part);
@@ -381,12 +251,13 @@
       for (let i = 0; i < formattedParts.length; i++) {
         if (i > 0) {
           const sep = isNewMode ? '    ' : Separators[Math.floor(Math.random() * Separators.length)];
-          lineStr += sep; 
+          lineStr += sep;
         }
         lineStr += formattedParts[i];
       }
       const result = lineStr;
 
+      // จบการจับเวลาและแสดงผล
       const endTime = Date.now();
       const generationTime = endTime - startTime;
       const variationCode = ObfuscationUtils.generateVariationCode();
@@ -399,11 +270,14 @@
       document.getElementById('generateCount').textContent = stats.generateCount;
       const obfuscationIcons = { v1:'✨', v2:'⚡', low: '🟢', medium: '🟡', high: '🔴', extreme: '⚫' };
       document.getElementById('obfuscationLevel').textContent = obfuscationIcons[level] || '🔒';
-      
       history.unshift({ result: result.replace(/<[^>]*>/g, ''), time: new Date().toLocaleTimeString('th-TH'), variation: variationCode });
       if (history.length > 5) history.pop();
       updateHistoryDisplay();
     }
+
+    // ==========================================
+    // 4. ส่วนจัดการ UI (UI HANDLERS)
+    // ==========================================
 
     function updateHistoryDisplay() {
       const container = document.getElementById('historyContainer');
@@ -454,192 +328,3 @@
     generateNew();
   })();
   </script>
-
-  <script>
-    (() => {
-      const canvas = document.getElementById('matrixCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-      const matrixArray = matrix.split("");
-      const fontSize = 10;
-      const columns = canvas.width / fontSize;
-      const drops = [];
-      for (let x = 0; x < columns; x++) { drops[x] = 1; }
-      function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#0F3';
-        ctx.font = fontSize + 'px monospace';
-        for (let i = 0; i < drops.length; i++) {
-          const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
-          drops[i]++;
-        }
-      }
-      setInterval(draw, 35);
-      window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-    })();
-  </script>
-
-  <script type="module">
-    const SUPABASE_URL = "https://uromhoezcxkhilxchxxe.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVyb21ob2V6Y3hraGlseGNoeHhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxMjEyOTUsImV4cCI6MjA2ODY5NzI5NX0.UDABYee8_JDlZHkKGzz6bQG0v95H86uLAP6WIN75Y7o";
-
-    const SHARED_BOARD_ID = 'my-shared-board-123';
-    const appId = SHARED_BOARD_ID;
-
-    let currentUserId = 'anon';
-    let messagesChannel = null;
-    let messageIdToDelete = null;
-
-    const messageForm = document.getElementById('message-form');
-    const messageInput = document.getElementById('message-input');
-    const titleInput = document.getElementById('title-input');
-    const messagesContainer = document.getElementById('messages-container');
-    const loadingState = document.getElementById('loading-state');
-    const toast = document.getElementById('toast');
-    const boardIdDisplay = document.getElementById('board-id-display');
-    const confirmModal = document.getElementById('confirmModal');
-    const modalCancelBtn = document.getElementById('modalCancelBtn');
-    const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function main(){
-      boardIdDisplay.textContent = appId;
-      try{
-        listenForMessages();
-      }catch(error){ console.error("Error initializing Supabase:", error); loadingState.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์"; }
-    }
-
-    function listenForMessages(){
-      if (messagesChannel) { sb.removeChannel(messagesChannel); }
-      loadAndRender();
-      messagesChannel = sb.channel('links-realtime')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'links' }, () => { loadAndRender(); })
-        .subscribe();
-    }
-
-    async function loadAndRender(){
-      loadingState.style.display = 'none';
-      const { data, error } = await sb
-        .from('links')
-        .select('id, title, url, created_at, is_pinned')
-        .order('created_at', { ascending: false });
-      if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อความได้</p>`; return; }
-
-      const messages = (data || []).map(row => ({
-        id: row.id,
-        title: row.title || '',
-        text: row.url || '',
-        isPinned: !!row.is_pinned,
-        timestamp: { toDate: () => new Date(row.created_at) }
-      }));
-      messages.sort((a, b) => {
-        if (a.isPinned && !b.isPinned) return -1;
-        if (!a.isPinned && b.isPinned) return 1;
-        return 0;
-      });
-      renderMessages(messages);
-    }
-
-    async function postMessage(text, title){
-      if (!text.trim()) return;
-      try{
-        const { error } = await sb.from('links').insert([{ title: title||'', url: text, is_pinned: false }]);
-        if (error) throw error;
-        messageInput.value=''; titleInput.value='';
-      }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ"); }
-    }
-
-    function openDeleteModal(id) {
-        messageIdToDelete = id;
-        confirmModal.classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-        messageIdToDelete = null;
-        confirmModal.classList.add('hidden');
-    }
-
-    modalCancelBtn.onclick = closeDeleteModal;
-
-    modalConfirmBtn.onclick = async () => {
-        if (messageIdToDelete) {
-            const originalText = modalConfirmBtn.innerText;
-            modalConfirmBtn.innerText = "กำลังลบ...";
-            
-            try {
-                const { error } = await sb.from('links').delete().eq('id', messageIdToDelete);
-                if (error) throw error;
-                
-                showToast("ลบข้อความเรียบร้อย!");
-                closeDeleteModal();
-            } catch (error) {
-                console.error("Delete Error:", error);
-                if(error.code === "42501" || error.message.includes("policy")) {
-                   alert("❌ ลบไม่ได้: สิทธิ์ไม่เพียงพอ\nกรุณาตั้งค่า Supabase Policy ให้รองรับการลบ (DELETE) สำหรับ anon");
-                } else {
-                   alert("เกิดข้อผิดพลาดในการลบ: " + error.message);
-                }
-            } finally {
-                modalConfirmBtn.innerText = originalText;
-                closeDeleteModal();
-            }
-        }
-    };
-    function renderMessages(messages){
-      messagesContainer.innerHTML='';
-      if (messages.length===0){ messagesContainer.innerHTML = `<p class="text-center text-gray-400">ยังไม่มีข้อความ ลองโพสต์เป็นคนแรกสิ!</p>`; return; }
-      messages.forEach(msg => { const messageElement = createMessageElement(msg); messagesContainer.appendChild(messageElement); });
-    }
-
-    function createMessageElement(msg){
-      const div = document.createElement('div');
-      div.className = `p-5 rounded-xl flex flex-col gap-4 fade-in gradient-border transition-transform duration-300 hover:scale-[1.02] ${msg.isPinned ? 'pinned-message' : ''}`;
-      let content = '';
-      if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`; }
-      content += `<p class="text-cyan-100 whitespace-pre-wrap flex-1 text-base">${escapeHTML(msg.text)}</p>`;
-      content += `<div class="flex items-center justify-between gap-4 w-full pt-2 border-t border-cyan-800/50">
-        <span class="text-xs" style="color:#93c5fd">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : 'กำลังส่ง...'}</span>
-        <div class="flex items-center gap-2">
-          ${msg.isPinned ? '<span class="text-yellow-400 text-lg">📌</span>' : ''}
-          <button class="pin-button btn btn-primary py-1 px-3 rounded-full text-sm">${msg.isPinned ? 'เลิกปัก' : 'ปักหมุด'}</button>
-          <button class="copy-button btn btn-primary py-1 px-3 rounded-full text-sm">คัดลอก</button>
-          <button class="delete-button btn btn-danger py-1 px-3 rounded-full text-sm">🗑️ ลบ</button>
-        </div>
-      </div>`;
-      div.innerHTML = content;
-      div.querySelector('.copy-button').onclick = (e) => { copyTextToClipboard(msg.text, e.target); };
-      div.querySelector('.pin-button').onclick = () => { togglePinMessage(msg.id); };
-      div.querySelector('.delete-button').onclick = () => { openDeleteModal(msg.id); };
-      return div;
-    }
-
-    function escapeHTML(str){ const p = document.createElement('p'); p.textContent = str; return p.innerHTML; }
-    messageForm.addEventListener('submit', (e) => { e.preventDefault(); postMessage(messageInput.value, titleInput.value); });
-    async function togglePinMessage(messageId) {
-      const { data, error } = await sb.from('links').select('is_pinned').eq('id', messageId).single();
-      if (error){ console.error('togglePin read error:', error); return; }
-      const currentPinnedStatus = !!data.is_pinned;
-      const { error: upErr } = await sb.from('links').update({ is_pinned: !currentPinnedStatus }).eq('id', messageId);
-      if (upErr){ console.error('togglePin update error:', upErr); }
-    }
-
-    function showToast(msg = 'คัดลอกข้อความแล้ว!'){ 
-        toast.textContent = msg;
-        toast.classList.remove('opacity-0','translate-y-10'); 
-        toast.classList.add('opacity-100','translate-y-0'); 
-        setTimeout(() => { 
-            toast.classList.remove('opacity-100','translate-y-0'); 
-            toast.classList.add('opacity-0','translate-y-10'); 
-        }, 2000);
-    }
-    function copyTextToClipboard(text, button){ navigator.clipboard.writeText(text).then(() => { showToast(); if (button){ button.textContent = 'สำเร็จ!'; setTimeout(() => { button.textContent = 'คัดลอก'; }, 2000); } }).catch(err => { console.error('Failed to copy text: ', err); }); }
-
-    main();
-  </script>
-</body>
-</html>
