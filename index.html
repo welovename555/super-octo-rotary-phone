@@ -1,9 +1,217 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All-in-One Tools — Reskin</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --bg-2: #0f172a;
+      --surface: #121a2b;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #60a5fa;
+      --primary-strong: #3b82f6;
+      --accent: #8b5cf6;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --card-border: rgba(148,163,184,.18);
+      --soft-shadow: 0 10px 24px rgba(2,6,23,.35);
+      --inner: inset 0 1px 0 rgba(255,255,255,.03);
+      --radius: 16px;
+    }
+
+    body{
+      font-family: 'Sarabun', system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Thai", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 10% -10%, #0f1a33 0%, transparent 60%),
+        radial-gradient(800px 500px at 110% 10%, #101c3a 0%, transparent 55%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    /* Nav Tabs */
+    .tab-button{ color:#a3adc2; border:1px solid transparent; background: transparent; transition: all .2s ease; }
+    .tab-button:hover{ color:#e5e7eb; background: rgba(255,255,255,.04); border-color: rgba(148,163,184,.2); }
+    .tab-button.active-tab{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 8px 20px rgba(59,130,246,.30); }
+
+    /* Cards */
+    .panel{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
+    .stats-card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid var(--card-border); border-radius: 12px; box-shadow: var(--inner); }
+
+    /* Result */
+    .result-box{ position: relative; overflow: hidden; background: var(--surface); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
+    .result-box::before{ content:""; position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(96,165,250,.09), transparent); transform: translateX(-100%); animation: shimmer 3.5s infinite; }
+    @keyframes shimmer{ 0%{ transform: translateX(-100%) } 100%{ transform: translateX(100%) }}
+    pre#resultDisplay{ font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#c7d2fe; line-height:1.7; }
+    
+    /* Highlight styles inside result */
+    .house-highlight { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0 4px; border-radius: 4px; }
+
+    /* Buttons */
+    .btn{ border:1px solid var(--card-border); border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; cursor: pointer; }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 10px 24px rgba(99,102,241,.25); }
+    .btn-primary:hover{ filter: brightness(1.02); box-shadow: 0 14px 28px rgba(99,102,241,.3) }
+    .btn-secondary{ color:#0b1220; background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 10px 24px rgba(16,185,129,.22); }
+    .btn-secondary:hover{ filter: brightness(1.03) }
+    .btn-danger{ color:#fff; background: #dc2626; border-color: rgba(239,68,68,.6) }
+    .btn-danger:hover{ background:#ef4444 }
+    .btn-ghost{ color:#9ca3af; background: transparent; border-color: transparent; }
+    .btn-ghost:hover{ color:#e5e7eb; background: rgba(255,255,255,0.05); }
+
+    /* Toast & Modal */
+    #toast{ background: linear-gradient(90deg, var(--primary), var(--accent)); box-shadow: 0 10px 30px rgba(59,130,246,.35); color:#0b1220; border-radius: 12px; }
+    
+    /* Custom Modal */
+    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+    .modal-content { background: #16223a; border: 1px solid var(--card-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+    /* Board message card */
+    .gradient-border{ border-radius: 14px; border:1px solid var(--card-border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); box-shadow: var(--inner); }
+    .pinned-message { border: 2px solid var(--primary); background: linear-gradient(180deg, rgba(96,165,250,.1), rgba(96,165,250,.05)); }
+
+    /* Matrix BG */
+    .matrix-bg{ position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
+
+    /* Utility */
+    .text-gray-400{ color: var(--muted) }
+    .bg-gray-800{ background-color: #101a2c }
+    .bg-gray-700{ background-color: #16223a }
+    .bg-gray-900\/50{ background-color: rgba(2,6,23,.5) }
+  </style>
+</head>
+<body class="text-gray-200">
+  <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+  <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50 transition-all duration-300">คัดลอกข้อความแล้ว!</div>
+
+  <div id="confirmModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden modal-backdrop">
+    <div class="modal-content rounded-2xl p-6 max-w-sm w-full mx-4 text-center">
+      <div class="mb-4 text-red-400 text-5xl">⚠️</div>
+      <h3 class="text-xl font-bold text-white mb-2">ยืนยันการลบ?</h3>
+      <p class="text-gray-400 text-sm mb-6">ข้อความนี้จะหายไปถาวรและกู้คืนไม่ได้<br>คุณแน่ใจหรือไม่?</p>
+      <div class="flex gap-3 justify-center">
+        <button id="modalCancelBtn" class="btn btn-ghost w-1/2">ยกเลิก</button>
+        <button id="modalConfirmBtn" class="btn btn-danger w-1/2 shadow-red-900/50 shadow-lg">ยืนยันลบ</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+
+    <nav class="flex justify-center items-center gap-2 md:gap-4 mb-8 bg-gray-900/50 p-2 rounded-xl backdrop-blur-sm panel">
+      <button id="btn-address-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg">🔐 สร้างที่อยู่ลับ</button>
+      <button id="btn-board-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg">💬 บอร์ดข้อความ</button>
+    </nav>
+
+    <main>
+      <section id="address-tab">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent mb-4" style="background-image: linear-gradient(90deg, var(--primary), var(--accent));">🔐 โปรแกรมสร้างที่อยู่ลับ</h1>
+          <p class="text-gray-400 text-lg mb-4">เครื่องมือสร้างที่อยู่และเบอร์โทรศัพท์แบบสุ่มและพรางตัว</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-blue-400" id="generateCount">0</div><div class="text-xs text-gray-400">ครั้งที่สร้าง</div></div>
+          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-green-400" id="copyCount">0</div><div class="text-xs text-gray-400">ครั้งที่คัดลอก</div></div>
+          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-purple-400" id="currentVariation">A1</div><div class="text-xs text-gray-400">รูปแบบปัจจุบัน</div></div>
+          <div class="stats-card p-4 text-center"><div class="text-2xl font-bold text-yellow-400" id="obfuscationLevel">🔒</div><div class="text-xs text-gray-400">ระดับการพราง</div></div>
+        </div>
+
+        <div class="result-box p-6 mb-6 relative">
+          <div class="absolute top-4 right-4 text-xs text-gray-500" id="generationTime"></div>
+          <pre id="resultDisplay" class="text-sm md:text-base leading-relaxed whitespace-pre-wrap min-h-[200px] overflow-x-auto"></pre>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <button id="generateBtn" class="btn btn-primary text-lg">🎲 สร้างใหม่</button>
+          <button id="copyBtn" class="btn btn-secondary text-lg">📋 คัดลอก</button>
+          <button id="clearBtn" class="btn btn-danger text-lg">🗑️ ล้างข้อมูล</button>
+        </div>
+
+        <div class="panel rounded-xl p-6 mb-6">
+          <h3 class="text-xl font-bold mb-4 text-center">⚙️ การตั้งค่าขั้นสูง</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="addressSelect" class="block text-sm font-medium mb-2">เลือกที่อยู่</label>
+              <select id="addressSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
+            </div>
+            <div>
+              <label for="obfuscationSelect" class="block text-sm font-medium mb-2">ระดับการพรางตัว</label>
+              <select id="obfuscationSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel rounded-xl p-6">
+          <h3 class="text-xl font-bold mb-4 text-center">📚 ประวัติการสร้าง (5 ครั้งล่าสุด)</h3>
+          <div id="historyContainer" class="space-y-2 max-h-60 overflow-y-auto">
+            <div class="text-center text-gray-500 text-sm">ยังไม่มีประวัติ</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="board-tab">
+        <header class="text-center mb-8 py-8 rounded-2xl panel">
+          <h1 class="text-3xl sm:text-4xl font-bold" style="background-image: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; background-clip:text; color: transparent;">บอร์ดข้อความสาธารณะ</h1>
+          <p class="text-gray-200 mt-2">โพสต์ข้อความเพื่อให้ทุกคนเห็นได้ทันที</p>
+          <div class="mt-4 text-sm" style="color:#93c5fd"><span>ID บอร์ด: </span><span id="board-id-display" class="font-mono bg-gray-800 p-1 rounded shadow-inner"></span></div>
+        </header>
+
+        <div class="p-6 rounded-2xl shadow-2xl mb-8 gradient-border">
+          <form id="message-form">
+            <label for="title-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">หัวข้อ/ชื่อไฟล์:</label>
+            <input id="title-input" type="text" class="w-full p-3 mb-3 bg-[#16223a] text-cyan-200 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่หัวข้อหรือชื่อไฟล์..." />
+            <label for="message-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">ข้อความของคุณ:</label>
+            <textarea id="message-input" rows="4" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+            <button type="submit" id="post-button" class="mt-4 w-full btn btn-primary">โพสต์ข้อความ</button>
+          </form>
+        </div>
+
+        <div id="messages-container" class="space-y-4">
+          <div id="loading-state" class="text-center py-10"><p class="text-gray-400">กำลังโหลดข้อความ...</p></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <script>
+    // Tab Switching Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('main > section');
+      const buttons = document.querySelectorAll('nav button');
+      function switchTab(tabId) {
+        tabs.forEach(tab => tab.classList.add('hidden'));
+        const activeTab = document.getElementById(tabId);
+        if (activeTab) activeTab.classList.remove('hidden');
+        buttons.forEach(button => button.classList.remove('active-tab'));
+        const activeButton = document.getElementById(`btn-${tabId}`);
+        if (activeButton) activeButton.classList.add('active-tab');
+      }
+      buttons.forEach(button => button.addEventListener('click', () => switchTab(button.id.replace('btn-',''))));
+      switchTab('address-tab');
+    });
+  </script>
+
+    <script>
   (() => {
     // ==========================================
     // 1. ส่วนตั้งค่าข้อมูล (DATA CONFIGURATION)
     // ==========================================
     
+    // เพิ่มข้อมูลภาษาอังกฤษ (_en) ให้ครบทุกคน เพื่อให้ระบบดึงไปสุ่มได้
     const ADDRESSES = {
       home: { 
         houseNumber: "82/7", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", 
@@ -29,7 +237,7 @@
       },
       mint: { 
         houseNumber: "1400", soi: "อ่อนนุช 42", 
-        village: "หอพักวงศ์กิตติพร แมนชั่น", // หอพักต้องมาเสมอ
+        village: "หอพักวงศ์กิตติพร แมนชั่น", // หอพักจะถูกบังคับให้แสดงเสมอใน Logic ด้านล่าง
         road: "อ่อนนุช", road_en: "On Nut Rd.",
         subdistrict: "สวนหลวง", subdistrict_en: "Suan Luang",
         district: "สวนหลวง", district_en: "Suan Luang",
@@ -50,29 +258,37 @@
       home: "0951698770", 
       alt1: "0946401569",
       nack: "0820571500", 
-      mint: "0959936570", // เพิ่มเบอร์มิ้นท์
+      mint: "0959936570", // ✅ เพิ่มเบอร์มิ้นท์เรียบร้อย
       first: "" 
     };
 
     let CURRENT_ADDRESS_KEY = 'home';
 
     // อัปเดตตัวเลือก Dropdown
-    document.getElementById('addressSelect').innerHTML = 
-      '<option value="home">บ้านไทยสมุทร</option>' + 
-      '<option value="alt1">บ้านปทุม</option>' +
-      '<option value="nack">📍 ที่อยู่แน้ค</option>' +
-      '<option value="mint">📍 ที่อยู่มินท์</option>' +
-      '<option value="first">📍 ที่อยู่เฟิร์ส</option>';
+    const addressSelect = document.getElementById('addressSelect');
+    if(addressSelect) {
+      addressSelect.innerHTML = 
+        '<option value="home">บ้านไทยสมุทร</option>' + 
+        '<option value="alt1">บ้านปทุม</option>' +
+        '<option value="nack">📍 ที่อยู่แน้ค</option>' +
+        '<option value="mint">📍 ที่อยู่มินท์</option>' +
+        '<option value="first">📍 ที่อยู่เฟิร์ส</option>';
+    }
       
-    document.getElementById('obfuscationSelect').innerHTML = 
-      '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
-      '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
-      '<option value="low">🟢 ต่ำ - อ่านง่าย</option>' +
-      '<option value="medium" selected>🟡 กลาง - สมดุล</option>' +
-      '<option value="high">🔴 สูง - พรางหนัก</option>' +
-      '<option value="extreme">⚫ สุดขั้น - เกือบไม่อ่านออก</option>';
+    const obfuscationSelect = document.getElementById('obfuscationSelect');
+    if(obfuscationSelect) {
+      obfuscationSelect.innerHTML = 
+        '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
+        '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
+        '<option value="low">🟢 ต่ำ - อ่านง่าย</option>' +
+        '<option value="medium" selected>🟡 กลาง - สมดุล</option>' +
+        '<option value="high">🔴 สูง - พรางหนัก</option>' +
+        '<option value="extreme">⚫ สุดขั้น - เกือบไม่อ่านออก</option>';
+    }
 
-    document.getElementById('addressSelect').addEventListener('change', (e) => { CURRENT_ADDRESS_KEY = e.target.value; generateNew(); });
+    if(addressSelect) {
+        addressSelect.addEventListener('change', (e) => { CURRENT_ADDRESS_KEY = e.target.value; generateNew(); });
+    }
 
     let stats = { generateCount: 0, copyCount: 0 };
     let history = [];
@@ -143,7 +359,9 @@
 
     function generateRandomAddress() {
       const startTime = Date.now();
-      const level = document.getElementById('obfuscationSelect').value;
+      const levelElement = document.getElementById('obfuscationSelect');
+      const level = levelElement ? levelElement.value : 'medium';
+      
       const selectedAddress = ADDRESSES[CURRENT_ADDRESS_KEY];
       const selectedPhone = PHONES[CURRENT_ADDRESS_KEY];
       
@@ -160,7 +378,7 @@
         return { value: thaiVal, isEng: false };
       }
 
-      // เตรียมข้อมูลแต่ละส่วน (สุ่มภาษาแยกกัน เพื่อให้เกิดการผสม)
+      // สุ่มเลือกภาษาสำหรับ ถนน, ตำบล, อำเภอ, จังหวัด
       const roadData = pickLang(selectedAddress.road, selectedAddress.road_en, 'road');
       const subData = pickLang(selectedAddress.subdistrict, selectedAddress.subdistrict_en, 'subdistrict');
       const distData = pickLang(selectedAddress.district, selectedAddress.district_en, 'district');
@@ -178,7 +396,7 @@
         
         { type:'soi', value: selectedAddress.soi, labelPool: Labels.soi },
         
-        // *** สำคัญ: ตั้ง required เป็น true ถ้ามีชื่อหอพัก/หมู่บ้าน (ทำให้ของมิ้นท์ไม่หาย) ***
+        // *** สำคัญ: ถ้ามีชื่อหอพัก/หมู่บ้าน ให้ required เป็น true เสมอ (ของมิ้นท์จะไม่หาย) ***
         { type:'village', value: selectedAddress.village, labelPool: Labels.village, required: !!selectedAddress.village },
         
         // ใช้ข้อมูลที่ผ่านการสุ่มภาษาแล้ว
@@ -201,7 +419,7 @@
           let others = allComponents.filter(c => c.type !== 'house' && c.type !== 'phone' && c.type !== 'postal');
           
           if (level === 'v2') {
-              // V2: สลับตำแหน่งส่วนอื่นๆ (เช่น ซอย, ถนน, หอพัก)
+              // V2: สลับตำแหน่งส่วนอื่นๆ
               others = others.sort(() => 0.5 - Math.random());
           }
 
@@ -305,7 +523,11 @@
       navigator.clipboard.writeText(resultText).then(() => {
         stats.copyCount++;
         document.getElementById('copyCount').textContent = stats.copyCount;
-        showToast('คัดลอกข้อความแล้ว!');
+        if(typeof showToast === 'function') {
+           showToast('คัดลอกข้อความแล้ว!');
+        } else {
+           alert('คัดลอกแล้ว');
+        }
       }).catch(err => {
         console.error('Failed to copy: ', err);
         alert('ไม่สามารถคัดลอกได้');
@@ -321,10 +543,20 @@
 
     function generateNew() { generateRandomAddress(); }
     
-    document.getElementById('generateBtn').addEventListener('click', generateNew);
-    document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
-    document.getElementById('clearBtn').addEventListener('click', clearResult);
+    // ผูก Event Listeners
+    const genBtn = document.getElementById('generateBtn');
+    if(genBtn) genBtn.addEventListener('click', generateNew);
+    
+    const copyBtn = document.getElementById('copyBtn');
+    if(copyBtn) copyBtn.addEventListener('click', copyToClipboard);
+    
+    const clearBtn = document.getElementById('clearBtn');
+    if(clearBtn) clearBtn.addEventListener('click', clearResult);
 
+    // เริ่มทำงานครั้งแรก
     generateNew();
   })();
   </script>
+
+</body>
+</html>
