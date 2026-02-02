@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All-in-One Tools — Reskin</title>
+  <title>All-in-One Tools — Reskin (Auto Parse)</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -87,6 +87,18 @@
     .email-card { position: relative; overflow: hidden; }
     .email-field { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
     .password-dot { font-family: sans-serif; letter-spacing: 2px; font-size: 1.2rem; line-height: 1; color: var(--muted); }
+    
+    /* Quick Paste Area */
+    .quick-paste-area {
+        background: rgba(16, 185, 129, 0.05);
+        border: 1px dashed rgba(16, 185, 129, 0.3);
+        transition: all 0.2s;
+    }
+    .quick-paste-area:focus {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.6);
+        outline: none;
+    }
 
     /* Matrix BG */
     .matrix-bg{ position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
@@ -136,7 +148,7 @@
                 <input id="editEmailField" type="text" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
              </div>
              <div>
-                <label class="block text-sm text-cyan-200 mb-1">รหัสผ่าน</label>
+                 <label class="block text-sm text-cyan-200 mb-1">รหัสผ่าน</label>
                 <div class="relative">
                     <input id="editPasswordField" type="text" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
                     <span class="absolute right-3 top-2.5 text-xs text-gray-500">Visible</span>
@@ -155,7 +167,7 @@
   <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
 
     <nav class="flex flex-wrap justify-center items-center gap-2 md:gap-4 mb-8 bg-gray-900/50 p-2 rounded-xl backdrop-blur-sm panel">
-      <button id="btn-address-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg text-sm md:text-base">🔐 สร้างที่อยู่ลับ</button>
+       <button id="btn-address-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg text-sm md:text-base">🔐 สร้างที่อยู่ลับ</button>
       <button id="btn-board-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg text-sm md:text-base">💬 บอร์ดข้อความ</button>
       <button id="btn-email-tab" class="tab-button font-bold py-2 px-4 md:px-6 rounded-lg text-sm md:text-base">📧 จัดการอีเมล</button>
     </nav>
@@ -189,13 +201,13 @@
           <h3 class="text-xl font-bold mb-4 text-center">⚙️ การตั้งค่าขั้นสูง</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label for="addressSelect" class="block text-sm font-medium mb-2">เลือกที่อยู่</label>
+               <label for="addressSelect" class="block text-sm font-medium mb-2">เลือกที่อยู่</label>
               <select id="addressSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm"></select>
             </div>
             <div>
               <label for="obfuscationSelect" class="block text-sm font-medium mb-2">ระดับการพรางตัว</label>
               <select id="obfuscationSelect" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm"></select>
-            </div>
+             </div>
           </div>
         </div>
 
@@ -235,15 +247,21 @@
         </header>
 
         <div class="p-6 rounded-2xl shadow-2xl mb-8 gradient-border">
+            <div class="mb-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-xl">
+                <label class="block text-sm font-bold text-emerald-400 mb-2">⚡ วางโค้ดด่วน (Email|Pass)</label>
+                <textarea id="quick-paste-input" rows="2" class="quick-paste-area w-full p-3 text-emerald-100 rounded-lg placeholder-emerald-700/50" placeholder="วางข้อมูล เช่น: tongocphunguo14@school.us|Phan9999"></textarea>
+                <div class="text-xs text-emerald-500/70 mt-1 text-right">ระบบจะแยกช่องให้อัตโนมัติ</div>
+            </div>
+
             <h3 class="text-lg font-bold mb-4 text-cyan-300">➕ เพิ่มบัญชีใหม่</h3>
             <form id="email-form" class="flex flex-col gap-3">
-                <input id="email-title-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="ชื่อเรียก (เช่น Facebook Mail 1)" required />
+                <input id="email-title-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="ชื่อเรียก (ถ้าไม่ใส่ จะดึงจากชื่อเมล)" />
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input id="email-addr-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="อีเมล / Username" required />
+                     <input id="email-addr-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="อีเมล / Username" required />
                     <input id="email-pass-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="รหัสผ่าน (Password)" required />
                 </div>
                 <button type="submit" class="mt-2 w-full btn btn-primary">💾 บันทึกข้อมูล</button>
-            </form>
+             </form>
         </div>
 
         <div id="loading-state" class="text-center py-10 hidden"><p class="text-gray-400">กำลังโหลดข้อมูล...</p></div>
@@ -272,7 +290,7 @@
       // Default Tab
       switchTab('address-tab');
     });
-  </script>
+</script>
 
   <script>
   (() => {
@@ -336,8 +354,8 @@
     const obfuscationSelect = document.getElementById('obfuscationSelect');
     if(obfuscationSelect) {
       obfuscationSelect.innerHTML = 
-        '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/วรรค)</option>' +
-        '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/วรรค)</option>' +
+        '<option value="v1">✨ ตัวใหม่ V.1 (เน้นอ่านง่าย/สุ่มวรรค)</option>' +
+        '<option value="v2">⚡ ตัวใหม่ V.2 (สลับตำแหน่ง/สุ่มวรรค)</option>' +
         '<option value="low">🟢 ต่ำ - อ่านง่าย</option>' +
         '<option value="medium" selected>🟡 กลาง - สมดุล</option>' +
         '<option value="high">🔴 สูง - พรางหนัก</option>' +
@@ -350,7 +368,6 @@
 
     let stats = { generateCount: 0, copyCount: 0 };
     let history = [];
-
     // 2. UTILS
     const Labels = {
       house: ['บ้านเลขที่', 'เลขที่', 'เลขที่บ้าน', 'House No.', 'Address No.', 'Addr. No.', 'Unit', '#', ''],
@@ -402,9 +419,15 @@
         const formats = [phone, phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'), phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3'), '+66 ' + phone.slice(1)];
         return formats[Math.floor(Math.random() * formats.length)];
       },
-      generateVariationCode: () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)] + '0123456789'[Math.floor(Math.random() * 10)]
+      generateVariationCode: () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)] + '0123456789'[Math.floor(Math.random() * 10)],
+      
+      // NEW: Random Spacing for Natural Look
+      getRandomSpacing: () => {
+         // Return 2 to 5 spaces randomly
+         const count = Math.floor(Math.random() * 4) + 2; 
+         return ' '.repeat(count);
+      }
     };
-    
     // 3. CORE LOGIC
     function generateRandomAddress() {
       const startTime = Date.now();
@@ -414,7 +437,8 @@
       const selectedAddress = ADDRESSES[CURRENT_ADDRESS_KEY];
       const selectedPhone = PHONES[CURRENT_ADDRESS_KEY];
       const isNewMode = (level === 'v1' || level === 'v2');
-      const postal = (!isNewMode && Math.random() < 0.5) ? ObfuscationUtils.toThaiNumerals(selectedAddress.postalCode) : selectedAddress.postalCode;
+      const postal = (!isNewMode && Math.random() < 0.5) ?
+        ObfuscationUtils.toThaiNumerals(selectedAddress.postalCode) : selectedAddress.postalCode;
 
       function pickLang(thaiVal, engVal, type, chance = 0.4) {
         if (!engVal) return { value: thaiVal, isEng: false };
@@ -427,9 +451,9 @@
       const distData = pickLang(selectedAddress.district, selectedAddress.district_en, 'district');
       const provData = pickLang(selectedAddress.province, selectedAddress.province_en, 'province');
       const getLabelPool = (originalPool, isEng) => { if(isEng) return ['']; return originalPool; };
-      
       const allComponents = [
-        { type:'house', value: isNewMode ? selectedAddress.houseNumber : `<mark class="house-highlight">${ObfuscationUtils.formatNumber(selectedAddress.houseNumber)}</mark>`, labelPool: Labels.house, required: !!selectedAddress.houseNumber },
+        { type:'house', value: isNewMode ?
+          selectedAddress.houseNumber : `<mark class="house-highlight">${ObfuscationUtils.formatNumber(selectedAddress.houseNumber)}</mark>`, labelPool: Labels.house, required: !!selectedAddress.houseNumber },
         { type:'phone', value: ObfuscationUtils.formatPhone(selectedPhone), labelPool: Labels.phone, required: !!selectedPhone },
         { type:'soi', value: selectedAddress.soi, labelPool: Labels.soi },
         { type:'village', value: selectedAddress.village, labelPool: Labels.village, required: !!selectedAddress.village },
@@ -439,18 +463,29 @@
         { type:'province', value: provData.value, labelPool: getLabelPool(Labels.province, provData.isEng) },
         { type:'postal', value: postal, labelPool: Labels.postal }
       ].filter(c => c.value && String(c.value).replace(/<[^>]*>/g, '').trim() !== '');
-
       let componentsToUse;
       if (isNewMode) {
           const house = allComponents.find(c => c.type === 'house');
           const phone = allComponents.find(c => c.type === 'phone');
           const postal = allComponents.find(c => c.type === 'postal');
           let others = allComponents.filter(c => c.type !== 'house' && c.type !== 'phone' && c.type !== 'postal');
-          if (level === 'v2') others = others.sort(() => 0.5 - Math.random());
+          
+          if (level === 'v2') {
+             // V2: Scramble middle parts completely
+             others = others.sort(() => 0.5 - Math.random());
+          }
+          // V1: Keep order logic roughly correct (House -> Phone/Others -> Postal)
+          
           componentsToUse = [];
           if(house) componentsToUse.push(house);
-          if(phone) componentsToUse.push(phone);
-          componentsToUse = componentsToUse.concat(others);
+          // Sometimes put phone early, sometimes late in V2
+          if(level === 'v2' && Math.random() > 0.5) {
+              componentsToUse = componentsToUse.concat(others);
+              if(phone) componentsToUse.push(phone);
+          } else {
+              if(phone) componentsToUse.push(phone);
+              componentsToUse = componentsToUse.concat(others);
+          }
           if(postal) componentsToUse.push(postal);
       } else {
           const required = allComponents.filter(c => c.required);
@@ -482,7 +517,13 @@
       let lineStr = '';
       for (let i = 0; i < formattedParts.length; i++) {
         if (i > 0) {
-          const sep = isNewMode ? '    ' : Separators[Math.floor(Math.random() * Separators.length)];
+          let sep;
+          if (isNewMode) {
+              // IMPROVED: V1/V2 now use random spacing
+              sep = ObfuscationUtils.getRandomSpacing();
+          } else {
+              sep = Separators[Math.floor(Math.random() * Separators.length)];
+          }
           lineStr += sep;
         }
         lineStr += formattedParts[i];
@@ -520,7 +561,7 @@
           </div>
           <div class="text-gray-300 text-xs whitespace-pre-wrap">${item.result}</div>
         </div>
-      `).join('');
+       `).join('');
     }
 
     function copyToClipboard() {
@@ -540,7 +581,8 @@
       document.getElementById('obfuscationLevel').textContent = '🔒';
     }
 
-    function generateNew() { generateRandomAddress(); }
+    function generateNew() { generateRandomAddress();
+    }
     
     const genBtn = document.getElementById('generateBtn');
     if(genBtn) genBtn.addEventListener('click', generateNew);
@@ -550,7 +592,7 @@
     if(clearBtn) clearBtn.addEventListener('click', clearResult);
     generateNew();
   })();
-  </script>
+</script>
 
   <script>
     (() => {
@@ -571,15 +613,16 @@
         ctx.font = fontSize + 'px monospace';
         for (let i = 0; i < drops.length; i++) {
           const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
+           ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0;
+}
           drops[i]++;
-        }
+}
       }
       setInterval(draw, 35);
       window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
     })();
-  </script>
+</script>
 
   <script type="module">
     const SUPABASE_URL = "https://uromhoezcxkhilxchxxe.supabase.co";
@@ -595,7 +638,6 @@
     let messageIdToDelete = null;
     let messageIdToEdit = null;
     let isEditingEmailMode = false;
-
     // Elements - Messages
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
@@ -608,6 +650,9 @@
     const emailAddrInput = document.getElementById('email-addr-input');
     const emailPassInput = document.getElementById('email-pass-input');
     const emailsContainer = document.getElementById('emails-container');
+    
+    // Quick Paste Element
+    const quickPasteInput = document.getElementById('quick-paste-input');
 
     const loadingState = document.getElementById('loading-state');
     const toast = document.getElementById('toast');
@@ -629,23 +674,24 @@
 
     const editCancelBtn = document.getElementById('editCancelBtn');
     const editSaveBtn = document.getElementById('editSaveBtn');
-
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function main(){
       boardIdDisplay.textContent = appId;
       try{
         listenForMessages();
-      }catch(error){ console.error("Error initializing Supabase:", error); loadingState.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์"; }
+      }catch(error){ console.error("Error initializing Supabase:", error); loadingState.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์";
+}
     }
 
     function listenForMessages(){
-      if (messagesChannel) { sb.removeChannel(messagesChannel); }
+      if (messagesChannel) { sb.removeChannel(messagesChannel);
+}
       loadAndRender();
       messagesChannel = sb.channel('links-realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'links' }, () => { loadAndRender(); })
         .subscribe();
-    }
+}
 
     async function loadAndRender(){
       loadingState.style.display = 'block';
@@ -653,10 +699,10 @@
         .from('links')
         .select('id, title, url, created_at, is_pinned')
         .order('created_at', { ascending: false });
-
       loadingState.style.display = 'none';
 
-      if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>`; return; }
+      if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>`; return;
+}
 
       // แยกข้อมูล Messages และ Emails
       const allData = (data || []).map(row => ({
@@ -666,7 +712,6 @@
         isPinned: !!row.is_pinned,
         timestamp: { toDate: () => new Date(row.created_at) }
       }));
-
       const emails = [];
       const messages = [];
 
@@ -684,14 +729,12 @@
               messages.push(item);
           }
       });
-
       // Sort messages by pin
       messages.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;
         return 0;
       });
-
       renderMessages(messages);
       renderEmails(emails);
     }
@@ -705,15 +748,25 @@
         if (error) throw error;
         messageInput.value=''; titleInput.value='';
         showToast("โพสต์ข้อความเรียบร้อย");
-      }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ"); }
+      }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ");
+}
     }
 
     async function postEmail(title, email, password) {
         if (!email.trim() || !password.trim()) return;
+        
+        // Auto Generate Title if Empty
+        let finalTitle = title.trim();
+        if (!finalTitle) {
+            // Try to use part of email as title
+            const userPart = email.split('@')[0];
+            finalTitle = userPart || "Account";
+        }
+
         // Combine into vault format
         const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}`;
         try {
-            const { error } = await sb.from('links').insert([{ title: title || 'ไม่มีชื่อ', url: secureString, is_pinned: false }]);
+            const { error } = await sb.from('links').insert([{ title: finalTitle, url: secureString, is_pinned: false }]);
             if (error) throw error;
             emailTitleInput.value = ''; emailAddrInput.value = ''; emailPassInput.value = '';
             showToast("บันทึกอีเมลเรียบร้อย!");
@@ -726,13 +779,14 @@
       messagesContainer.innerHTML='';
       if (messages.length===0){ messagesContainer.innerHTML = `<p class="text-center text-gray-400">ยังไม่มีข้อความ</p>`; return; }
       messages.forEach(msg => { messagesContainer.appendChild(createMessageElement(msg)); });
-    }
+}
 
     function renderEmails(emails) {
         emailsContainer.innerHTML = '';
-        if (emails.length === 0) { emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ยังไม่มีอีเมลที่บันทึกไว้</p>`; return; }
+        if (emails.length === 0) { emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ยังไม่มีอีเมลที่บันทึกไว้</p>`; return;
+}
         emails.forEach(mail => { emailsContainer.appendChild(createEmailCard(mail)); });
-    }
+}
 
     // --- CARD CREATION ---
 
@@ -740,13 +794,17 @@
       const div = document.createElement('div');
       div.className = `p-5 rounded-xl flex flex-col gap-4 fade-in gradient-border transition-transform duration-300 hover:scale-[1.02] ${msg.isPinned ? 'pinned-message' : ''}`;
       let content = '';
-      if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`; }
+      if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`;
+}
       content += `<p class="text-cyan-100 whitespace-pre-wrap flex-1 text-base">${escapeHTML(msg.text)}</p>`;
       content += `<div class="flex items-center justify-between gap-4 w-full pt-2 border-t border-cyan-800/50">
-        <span class="text-xs" style="color:#93c5fd">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
+        <span class="text-xs" style="color:#93c5fd">${msg.timestamp ?
+        new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          ${msg.isPinned ? '<span class="text-yellow-400 text-lg">📌</span>' : ''}
-          <button class="pin-button btn btn-primary py-1 px-3 rounded-full text-sm">${msg.isPinned ? 'เลิกปัก' : 'ปักหมุด'}</button>
+          ${msg.isPinned ?
+          '<span class="text-yellow-400 text-lg">📌</span>' : ''}
+          <button class="pin-button btn btn-primary py-1 px-3 rounded-full text-sm">${msg.isPinned ?
+          'เลิกปัก' : 'ปักหมุด'}</button>
           <button class="copy-button btn btn-primary py-1 px-3 rounded-full text-sm">คัดลอก</button>
           <button class="edit-button btn btn-secondary py-1 px-3 rounded-full text-sm">✏️ แก้ไข</button>
           <button class="delete-button btn btn-danger py-1 px-3 rounded-full text-sm">🗑️ ลบ</button>
@@ -758,12 +816,11 @@
       div.querySelector('.delete-button').onclick = () => { openDeleteModal(msg.id); };
       div.querySelector('.edit-button').onclick = () => { openEditModal(msg.id, msg.title, msg.text, false); };
       return div;
-    }
+}
 
     function createEmailCard(data) {
         const div = document.createElement('div');
         div.className = 'p-5 rounded-xl flex flex-col gap-3 gradient-border email-card transition-transform duration-300 hover:scale-[1.01]';
-        
         div.innerHTML = `
             <div class="flex justify-between items-start mb-1">
                 <div class="font-bold text-lg text-white">${escapeHTML(data.title)}</div>
@@ -776,23 +833,21 @@
             <div class="email-field group relative">
                 <span class="text-cyan-300 select-all truncate mr-2">${escapeHTML(data.email)}</span>
             </div>
-            
+          
             <div class="email-field group relative">
                 <span class="password-mask password-dot">••••••••</span>
                 <span class="password-text hidden text-green-300 select-all font-mono">${escapeHTML(data.password)}</span>
                 <button class="toggle-pass text-xs text-gray-400 hover:text-white ml-2 bg-gray-800 px-2 py-1 rounded">👁️</button>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mt-2">
+             <div class="grid grid-cols-2 gap-3 mt-2">
                 <button class="copy-email btn btn-primary py-2 text-sm">📋 คัดลอกเมล</button>
                 <button class="copy-pass btn btn-secondary py-2 text-sm">🔑 คัดลอกรหัส</button>
             </div>
         `;
-
         // Handlers
         const passMask = div.querySelector('.password-mask');
         const passText = div.querySelector('.password-text');
-        
         div.querySelector('.toggle-pass').onclick = (e) => {
             passMask.classList.toggle('hidden');
             passText.classList.toggle('hidden');
@@ -805,7 +860,7 @@
         div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password);
 
         return div;
-    }
+}
 
     // --- SHARED MODAL LOGIC ---
 
@@ -835,7 +890,6 @@
             }
         }
     };
-
     // --- EDIT LOGIC (UPDATED FOR EMAIL) ---
     function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '') {
         messageIdToEdit = id;
@@ -855,30 +909,30 @@
             editMessageInput.value = currentText;
         }
         editModal.classList.remove('hidden');
-    }
+}
 
     function closeEditModal() {
         messageIdToEdit = null;
         editModal.classList.add('hidden');
-    }
+}
     editCancelBtn.onclick = closeEditModal;
 
     editSaveBtn.onclick = async () => {
         if (!messageIdToEdit) return;
-
         const newTitle = editTitleInput.value;
         let newUrl = '';
 
         if (isEditingEmailMode) {
              const e = editEmailField.value.trim();
              const p = editPasswordField.value.trim();
-             if (!e || !p) { alert("กรุณากรอกข้อมูลให้ครบ"); return; }
+             if (!e || !p) { alert("กรุณากรอกข้อมูลให้ครบ"); return;
+}
              newUrl = `${EMAIL_PREFIX}${e}${EMAIL_SEPARATOR}${p}`;
         } else {
              const t = editMessageInput.value;
              if (!t.trim()) { alert("กรุณาใส่ข้อความ"); return; }
              newUrl = t;
-        }
+}
 
         const originalText = editSaveBtn.innerText;
         editSaveBtn.innerText = "กำลังบันทึก...";
@@ -892,12 +946,45 @@
             alert("บันทึกไม่สำเร็จ: " + error.message);
         } finally {
             editSaveBtn.innerText = originalText;
-        }
+}
     };
+
+    // --- QUICK PASTE LISTENER ---
+    if(quickPasteInput) {
+        quickPasteInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            // Detect Email|Pass pattern
+            if (val.includes('|')) {
+                const parts = val.split('|');
+                if(parts.length >= 2) {
+                    const email = parts[0].trim();
+                    const pass = parts[1].trim();
+                    
+                    if(email && pass) {
+                        emailAddrInput.value = email;
+                        emailPassInput.value = pass;
+                        
+                        // Auto-fill title with username part of email if empty
+                        if(!emailTitleInput.value) {
+                             emailTitleInput.value = email.split('@')[0];
+                        }
+                        
+                        // Clear the paste area for clean feeling
+                        quickPasteInput.value = '';
+                        showToast("แยกข้อมูล Email/Pass ให้แล้ว!");
+                        
+                        // Optional: Highlight the save button
+                        document.querySelector('#email-form button[type="submit"]').focus();
+                    }
+                }
+            }
+        });
+    }
 
     // --- UTILS ---
 
-    function escapeHTML(str){ const p = document.createElement('p'); p.textContent = str; return p.innerHTML; }
+    function escapeHTML(str){ const p = document.createElement('p');
+    p.textContent = str; return p.innerHTML; }
     
     // Forms Submit
     messageForm.addEventListener('submit', (e) => { e.preventDefault(); postMessage(messageInput.value, titleInput.value); });
@@ -905,13 +992,13 @@
         e.preventDefault(); 
         postEmail(emailTitleInput.value, emailAddrInput.value, emailPassInput.value); 
     });
-
     async function togglePinMessage(messageId) {
       const { data, error } = await sb.from('links').select('is_pinned').eq('id', messageId).single();
       if (error){ console.error('togglePin read error:', error); return; }
       const currentPinnedStatus = !!data.is_pinned;
       const { error: upErr } = await sb.from('links').update({ is_pinned: !currentPinnedStatus }).eq('id', messageId);
-      if (upErr){ console.error('togglePin update error:', upErr); }
+      if (upErr){ console.error('togglePin update error:', upErr);
+}
     }
 
     function showToast(msg = 'คัดลอกข้อความแล้ว!'){ 
@@ -922,7 +1009,7 @@
             toast.classList.remove('opacity-100','translate-y-0'); 
             toast.classList.add('opacity-0','translate-y-10'); 
         }, 2000);
-    }
+}
     
     function copyTextToClipboard(text, button){ 
         navigator.clipboard.writeText(text).then(() => { 
@@ -933,7 +1020,7 @@
                 setTimeout(() => { button.textContent = oldText; }, 2000); 
             } 
         }).catch(err => { console.error('Failed to copy text: ', err); });
-    }
+}
 
     main();
   </script>
