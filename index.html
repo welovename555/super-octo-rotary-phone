@@ -929,6 +929,7 @@
               item.email = parts[0] || '';
               item.password = parts[1] || '';
               item.expiryDays = parseInt(parts[2]) || 1; // Default to 1 day if not set
+              item.status = parts[3] || '0'; // Default to '0' (❌)
               emails.push(item);
           } else {
               // Normal message
@@ -959,7 +960,7 @@
 }
     }
 
-    async function postEmail(title, email, password, days) {
+    async function postEmail(title, email, password, days, status = '0') {
         if (!email.trim() || !password.trim()) return;
         // --- 1. Auto Generate Title as Date/Month if Empty ---
         let finalTitle = title.trim();
@@ -971,9 +972,9 @@
             // e.g., "2/2"
         }
 
-        // --- 2. Combine into vault format with Expiry Days ---
-        // Format: vault://email|::|password|::|days
-        const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}${EMAIL_SEPARATOR}${days}`;
+        // --- 2. Combine into vault format with Expiry Days and Status ---
+        // Format: vault://email|::|password|::|days|::|status
+        const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}${EMAIL_SEPARATOR}${days}${EMAIL_SEPARATOR}${status}`;
         try {
             const { error } = await sb.from('links').insert([{ title: finalTitle, url: secureString, is_pinned: false }]);
             if (error) throw error;
