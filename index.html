@@ -206,6 +206,27 @@
                     <span class="absolute right-3 top-2.5 text-xs text-gray-500">Visible</span>
                 </div>
              </div>
+             <div>
+                <label class="block text-sm text-cyan-200 mb-1">อายุอีเมล (วัน)</label>
+                <input id="editExpiryDaysField" type="number" min="1" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
+             </div>
+             <div>
+                <label class="block text-sm text-cyan-200 mb-1">สถานะ</label>
+                <div class="flex gap-4 mt-1">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="edit-email-status" value="0" class="w-4 h-4 accent-red-500">
+                        <span class="text-sm text-white">❌</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="edit-email-status" value="1" class="w-4 h-4 accent-yellow-500">
+                        <span class="text-sm text-white">⏱️</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="edit-email-status" value="2" class="w-4 h-4 accent-green-500">
+                        <span class="text-sm text-white">✅</span>
+                    </label>
+                </div>
+             </div>
         </div>
       </div>
 
@@ -337,6 +358,24 @@
 
                         <input type="radio" name="email-life" id="life-5" value="5" checked>
                         <label for="life-5">5 วัน</label>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4 py-2">
+                    <span class="text-sm text-gray-400">📊 สถานะ:</span>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="email-status" value="0" checked class="w-4 h-4 accent-red-500">
+                            <span class="text-sm">❌</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="email-status" value="1" class="w-4 h-4 accent-yellow-500">
+                            <span class="text-sm">⏱️</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="email-status" value="2" class="w-4 h-4 accent-green-500">
+                            <span class="text-sm">✅</span>
+                        </label>
                     </div>
                 </div>
         
@@ -836,6 +875,7 @@
     const editEmailContainer = document.getElementById('editEmailContainer');
     const editEmailField = document.getElementById('editEmailField');
     const editPasswordField = document.getElementById('editPasswordField');
+    const editExpiryDaysField = document.getElementById('editExpiryDaysField');
 
     const editCancelBtn = document.getElementById('editCancelBtn');
     const editSaveBtn = document.getElementById('editSaveBtn');
@@ -1011,12 +1051,18 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             statusText = `เหลือ ${daysLeft} วัน ✅`;
         }
 
+        const statusIcons = { '0': '❌', '1': '⏱️', '2': '✅' };
+        const currentStatusIcon = statusIcons[data.status] || '❌';
+
         // Apply classes
         div.className = `p-5 rounded-xl flex flex-col gap-3 gradient-border email-card transition-transform duration-300 hover:scale-[1.01] ${statusClass}`;
         div.innerHTML = `
             <div class="flex justify-between items-start mb-1">
                 <div>
-                    <div class="font-bold text-lg text-white">${escapeHTML(data.title)}</div>
+                    <div class="font-bold text-lg text-white flex items-center gap-2">
+                        <span>${escapeHTML(data.title)}</span>
+                        <button class="quick-status-btn text-base hover:scale-125 transition-transform" title="คลิกเพื่อเปลี่ยนสถานะ">${currentStatusIcon}</button>
+                    </div>
                     <div class="text-xs text-gray-400 mt-1 font-mono">${statusText}</div>
                 </div>
                 <div class="flex gap-2">
@@ -1057,8 +1103,33 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         div.querySelector('.copy-pass').onclick = (e) => copyTextToClipboard(data.password, e.target);
         div.querySelector('.del-btn').onclick = () => openDeleteModal(data.id);
         
-        // Pass existing days to edit modal (to preserve it)
-        div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password, data.expiryDays);
+        // Pass existing days and status to edit modal
+        div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password, data.expiryDays, data.status);
+
+        // Quick Status Change Handler
+        div.querySelector('.quick-status-btn').onclick = async (e) => {
+            const statusOrder = ['0', '1', '2']; // ❌ -> ⏱️ -> ✅
+            let currentIndex = statusOrder.indexOf(data.status);
+            if (currentIndex === -1) currentIndex = 0;
+            const nextStatus = statusOrder[(currentIndex + 1) % statusOrder.length];
+            
+            const btn = e.currentTarget;
+            const originalIcon = btn.textContent;
+            btn.textContent = '⏳';
+            
+            try {
+                const newUrl = `${EMAIL_PREFIX}${data.email}${EMAIL_SEPARATOR}${data.password}${EMAIL_SEPARATOR}${data.expiryDays}${EMAIL_SEPARATOR}${nextStatus}`;
+                const { error } = await sb.from('links').update({ url: newUrl }).eq('id', data.id);
+                if (error) throw error;
+                showToast("อัปเดตสถานะแล้ว!");
+                // Note: Realtime listener will handle the UI update
+            } catch (err) {
+                console.error("Quick status update error:", err);
+                btn.textContent = originalIcon;
+                alert("ไม่สามารถเปลี่ยนสถานะได้");
+            }
+        };
+
         return div;
     }
 
@@ -1094,7 +1165,7 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
     let editingEmailDays = 1;
     // Store original days when editing
 
-    function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '', currentDays = 1) {
+    function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '', currentDays = 1, currentStatus = '0') {
         messageIdToEdit = id;
         isEditingEmailMode = isEmail;
         editTitleInput.value = currentTitle;
@@ -1105,8 +1176,13 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             editEmailContainer.classList.remove('hidden');
             editEmailField.value = emailVal;
             editPasswordField.value = passVal;
-            editingEmailDays = currentDays;
-            // Remember the original duration
+            editExpiryDaysField.value = currentDays;
+            
+            // Set status radio
+            const statusRadios = document.getElementsByName('edit-email-status');
+            statusRadios.forEach(r => {
+                if (r.value === currentStatus) r.checked = true;
+            });
         } else {
             // Show Message Textarea
             editMessageContainer.classList.remove('hidden');
@@ -1130,10 +1206,12 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         if (isEditingEmailMode) {
              const e = editEmailField.value.trim();
              const p = editPasswordField.value.trim();
-             if (!e || !p) { alert("กรุณากรอกข้อมูลให้ครบ"); return;
-}
-             // Preserve the original expiry days when editing
-             newUrl = `${EMAIL_PREFIX}${e}${EMAIL_SEPARATOR}${p}${EMAIL_SEPARATOR}${editingEmailDays}`;
+             const d = editExpiryDaysField.value.trim() || '1';
+             const s = document.querySelector('input[name="edit-email-status"]:checked').value;
+             
+             if (!e || !p) { alert("กรุณากรอกข้อมูลให้ครบ"); return; }
+             
+             newUrl = `${EMAIL_PREFIX}${e}${EMAIL_SEPARATOR}${p}${EMAIL_SEPARATOR}${d}${EMAIL_SEPARATOR}${s}`;
 } else {
              const t = editMessageInput.value;
              if (!t.trim()) { alert("กรุณาใส่ข้อความ"); return; }
@@ -1219,7 +1297,11 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         const selectedLife = document.querySelector('input[name="email-life"]:checked');
         const days = selectedLife ? selectedLife.value : 5; // Default 5
 
-        postEmail(emailTitleInput.value, emailAddrInput.value, emailPassInput.value, days); 
+        // Get Selected Status
+        const selectedStatus = document.querySelector('input[name="email-status"]:checked');
+        const status = selectedStatus ? selectedStatus.value : '0';
+
+        postEmail(emailTitleInput.value, emailAddrInput.value, emailPassInput.value, days, status); 
     });
     async function togglePinMessage(messageId) {
       const { data, error } = await sb.from('links').select('is_pinned').eq('id', messageId).single();
