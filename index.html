@@ -42,125 +42,70 @@
     }
 
     /* Nav Tabs */
-    .tab-button{ color:#a3adc2; border:1px solid transparent; background: transparent;
-    transition: all .2s ease; }
+    .tab-button{ color:#a3adc2; border:1px solid transparent; background: transparent; transition: all .2s ease; }
     .tab-button:hover{ color:#e5e7eb; background: rgba(255,255,255,.04); border-color: rgba(148,163,184,.2); }
-    .tab-button.active-tab{ color:#0b1220;
-    background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 8px 20px rgba(59,130,246,.30);
-    }
+    .tab-button.active-tab{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 8px 20px rgba(59,130,246,.30); }
 
     /* Cards */
-    .panel{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid var(--card-border); border-radius: var(--radius);
-    box-shadow: var(--soft-shadow), var(--inner); }
-    .stats-card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid var(--card-border); border-radius: 12px; box-shadow: var(--inner);
-    }
+    .panel{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
+    .stats-card{ background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1px solid var(--card-border); border-radius: 12px; box-shadow: var(--inner); }
 
     /* Result */
-    .result-box{ position: relative; overflow: hidden; background: var(--surface); border:1px solid var(--card-border);
-    border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
-    .result-box::before{ content:""; position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(96,165,250,.09), transparent); transform: translateX(-100%);
-    animation: shimmer 3.5s infinite; }
+    .result-box{ position: relative; overflow: hidden; background: var(--surface); border:1px solid var(--card-border); border-radius: var(--radius); box-shadow: var(--soft-shadow), var(--inner); }
+    .result-box::before{ content:""; position:absolute; inset:0; background: linear-gradient(90deg, transparent, rgba(96,165,250,.09), transparent); transform: translateX(-100%); animation: shimmer 3.5s infinite; }
     @keyframes shimmer{ 0%{ transform: translateX(-100%) } 100%{ transform: translateX(100%) }}
-    pre#resultDisplay{ font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    color:#c7d2fe; line-height:1.7; }
+    pre#resultDisplay{ font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#c7d2fe; line-height:1.7; }
     
     /* Highlight styles inside result */
-    .house-highlight { background: rgba(59, 130, 246, 0.2);
-    color: #93c5fd; padding: 0 4px; border-radius: 4px; }
+    .house-highlight { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0 4px; border-radius: 4px; }
 
     /* Buttons */
-    .btn{ border:1px solid var(--card-border);
-    border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn:active{ transform: translateY(1px);
-    }
-    .btn-primary{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 10px 24px rgba(99,102,241,.25);
-    }
+    .btn{ border:1px solid var(--card-border); border-radius: 12px; padding: 10px 16px; font-weight:700; transition: transform .05s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{ color:#0b1220; background: linear-gradient(135deg, var(--primary), var(--accent)); border-color: transparent; box-shadow: 0 10px 24px rgba(99,102,241,.25); }
     .btn-primary:hover{ filter: brightness(1.02); box-shadow: 0 14px 28px rgba(99,102,241,.3) }
-    .btn-secondary{ color:#0b1220;
-    background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 10px 24px rgba(16,185,129,.22);
-    }
+    .btn-secondary{ color:#0b1220; background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; box-shadow: 0 10px 24px rgba(16,185,129,.22); }
     .btn-secondary:hover{ filter: brightness(1.03) }
-    .btn-danger{ color:#fff; background: #dc2626;
-    border-color: rgba(239,68,68,.6) }
+    .btn-danger{ color:#fff; background: #dc2626; border-color: rgba(239,68,68,.6) }
     .btn-danger:hover{ background:#ef4444 }
-    .btn-ghost{ color:#9ca3af; background: transparent; border-color: transparent;
-    }
+    .btn-ghost{ color:#9ca3af; background: transparent; border-color: transparent; }
     .btn-ghost:hover{ color:#e5e7eb; background: rgba(255,255,255,0.05); }
 
     /* Toast & Modal */
-    #toast{ background: linear-gradient(90deg, var(--primary), var(--accent));
-    box-shadow: 0 10px 30px rgba(59,130,246,.35); color:#0b1220; border-radius: 12px; }
+    #toast{ background: linear-gradient(90deg, var(--primary), var(--accent)); box-shadow: 0 10px 30px rgba(59,130,246,.35); color:#0b1220; border-radius: 12px; }
     
     /* Custom Modal */
-    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px); }
-    .modal-content { background: #16223a; border: 1px solid var(--card-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    @keyframes modalPop { 0% { opacity: 0;
-    transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0);
-    } }
+    .modal-backdrop { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+    .modal-content { background: #16223a; border: 1px solid var(--card-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
     /* Board message card */
-    .gradient-border{ border-radius: 14px; border:1px solid var(--card-border);
-    background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); box-shadow: var(--inner); }
-    .pinned-message { border: 2px solid var(--primary); background: linear-gradient(180deg, rgba(96,165,250,.1), rgba(96,165,250,.05));
-    }
+    .gradient-border{ border-radius: 14px; border:1px solid var(--card-border); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); box-shadow: var(--inner); }
+    .pinned-message { border: 2px solid var(--primary); background: linear-gradient(180deg, rgba(96,165,250,.1), rgba(96,165,250,.05)); }
 
     /* Email Card Specific */
-    .email-card { position: relative; overflow: hidden;
-    transition: all 0.3s ease; }
-    .email-field { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-    padding: 8px 12px; display: flex;
-      align-items: center; justify-content: space-between; }
-    .password-dot { font-family: sans-serif; letter-spacing: 2px;
-    font-size: 1.2rem; line-height: 1; color: var(--muted);
-    }
+    .email-card { position: relative; overflow: hidden; transition: all 0.3s ease; }
+    .email-field { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .password-dot { font-family: sans-serif; letter-spacing: 2px; font-size: 1.2rem; line-height: 1; color: var(--muted); }
     
-    /* Email Status Styles */
-    .email-status-good { border: 1px solid rgba(34, 197, 94, 0.5);
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.1); }
-    .email-status-warning { border: 1px solid rgba(234, 179, 8, 0.5);
-    box-shadow: 0 0 15px rgba(234, 179, 8, 0.1); }
-    .email-status-expired { border: 1px solid rgba(75, 85, 99, 0.5);
-    background: rgba(17, 24, 39, 0.8); opacity: 0.7; filter: grayscale(0.8); }
-
-    /* Custom Radio for Days */
-    .day-selector input[type="radio"] { display: none;
-    }
-    .day-selector label {
-        cursor: pointer; padding: 6px 12px;
-    border-radius: 8px; border: 1px solid var(--card-border);
-        background: rgba(255,255,255,0.05); color: var(--muted); transition: all 0.2s; font-size: 0.9rem;
-    }
-    .day-selector input[type="radio"]:checked + label {
-        background: var(--primary); color: #0b1220;
-    border-color: var(--primary); font-weight: bold;
-    }
+    /* Email Status Styles (Updated) */
+    .email-status-good { border: 1px solid rgba(34, 197, 94, 0.5); box-shadow: 0 0 15px rgba(34, 197, 94, 0.1); }
+    .email-status-warning { border: 1px solid rgba(234, 179, 8, 0.5); box-shadow: 0 0 15px rgba(234, 179, 8, 0.1); }
+    .email-status-expired { border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(17, 24, 39, 0.8); }
 
     /* Quick Paste Area */
-    .quick-paste-area {
-        background: rgba(16, 185, 129, 0.05);
-    border: 1px dashed rgba(16, 185, 129, 0.3);
-        transition: all 0.2s;
-    }
-    .quick-paste-area:focus {
-        background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.6);
-        outline: none;
-    }
+    .quick-paste-area { background: rgba(16, 185, 129, 0.05); border: 1px dashed rgba(16, 185, 129, 0.3); transition: all 0.2s; }
+    .quick-paste-area:focus { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.6); outline: none; }
 
     /* Matrix BG */
-    .matrix-bg{ position:fixed;
-    inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
+    .matrix-bg{ position:fixed; inset:0; width:100vw; height:100vh; z-index:-1; opacity:.06; pointer-events:none; }
 
     /* Utility */
     .text-gray-400{ color: var(--muted) }
     .bg-gray-800{ background-color: #101a2c }
     .bg-gray-700{ background-color: #16223a }
     .bg-gray-900\/50{ background-color: rgba(2,6,23,.5) }
-    .hidden { display: none !important;
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body class="text-gray-200">
@@ -190,8 +135,11 @@
         </div>
         
         <div id="editMessageContainer">
-            <label class="block text-sm text-cyan-200 mb-1">ข้อความ</label>
-            <textarea id="editMessageInput" rows="5" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"></textarea>
+            <label class="block text-sm text-cyan-200 mb-1">ข้อความหลัก</label>
+            <textarea id="editMessageInput" rows="4" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"></textarea>
+            
+            <label class="block text-sm text-cyan-200 mb-1 mt-3">ลิ้งค์ หรือ โค้ด</label>
+            <textarea id="editExtraMessageInput" rows="2" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"></textarea>
         </div>
 
         <div id="editEmailContainer" class="hidden space-y-3">
@@ -200,15 +148,11 @@
                 <input id="editEmailField" type="text" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
              </div>
              <div>
-                 <label class="block text-sm text-cyan-200 mb-1">รหัสผ่าน</label>
+                <label class="block text-sm text-cyan-200 mb-1">รหัสผ่าน</label>
                 <div class="relative">
                     <input id="editPasswordField" type="text" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
                     <span class="absolute right-3 top-2.5 text-xs text-gray-500">Visible</span>
                 </div>
-             </div>
-             <div>
-                <label class="block text-sm text-cyan-200 mb-1">อายุอีเมล (วัน)</label>
-                <input id="editExpiryDaysField" type="number" min="1" class="w-full p-2 bg-[#0b1220] border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none" />
              </div>
              <div>
                 <label class="block text-sm text-cyan-200 mb-1">สถานะ</label>
@@ -285,7 +229,7 @@
         </div>
 
        <div class="panel rounded-xl p-6">
-           <h3 class="text-xl font-bold mb-4 text-center">📚 ประวัติการสร้าง (5 ครั้งล่าสุด)</h3>
+         <h3 class="text-xl font-bold mb-4 text-center">📚 ประวัติการสร้าง (5 ครั้งล่าสุด)</h3>
           <div id="historyContainer" class="space-y-2 max-h-60 overflow-y-auto">
             <div class="text-center text-gray-500 text-sm">ยังไม่มีประวัติ</div>
           </div>
@@ -294,30 +238,33 @@
 
       <section id="board-tab" class="hidden">
         <header class="text-center mb-8 py-8 rounded-2xl panel">
-          <h1 class="text-3xl sm:text-4xl font-bold" style="background-image: linear-gradient(90deg, var(--primary), var(--accent));
--webkit-background-clip:text; background-clip:text; color: transparent;">บอร์ดข้อความสาธารณะ</h1>
-          <p class="text-gray-200 mt-2">โพสต์ข้อความเพื่อให้ทุกคนเห็นได้ทันที</p>
+          <h1 class="text-3xl sm:text-4xl font-bold" style="background-image: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip:text; background-clip:text; color: transparent;">บอร์ดข้อความสาธารณะ</h1>
+          <p class="text-gray-200 mt-2">โพสต์ข้อความหรือลิ้งค์เพื่อให้ทุกคนเห็นได้ทันที</p>
           <div class="mt-4 text-sm" style="color:#93c5fd"><span>ID บอร์ด: </span><span id="board-id-display" class="font-mono bg-gray-800 p-1 rounded shadow-inner"></span></div>
         </header>
 
         <div class="p-6 rounded-2xl shadow-2xl mb-8 gradient-border">
           <form id="message-form">
             <label for="title-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">หัวข้อ/ชื่อไฟล์:</label>
-             <input id="title-input" type="text" class="w-full p-3 mb-3 bg-[#16223a] text-cyan-200 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่หัวข้อหรือชื่อไฟล์..." />
+            <input id="title-input" type="text" class="w-full p-3 mb-3 bg-[#16223a] text-cyan-200 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่หัวข้อหรือชื่อไฟล์..." />
+            
             <label for="message-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">ข้อความของคุณ:</label>
-            <textarea id="message-input" rows="4" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+            <textarea id="message-input" rows="4" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="พิมพ์ข้อความที่นี่... (เช่น ที่อยู่จัดส่ง)"></textarea>
+            
+            <label for="extra-links-input" class="block text-lg font-semibold mb-2 mt-4" style="color:#93c5fd">ลิ้งค์ หรือ โค้ด (แยกบรรทัด):</label>
+            <textarea id="extra-links-input" rows="2" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่ลิ้งค์ Shopee หรือ โค้ดต่างๆ (บรรทัดละ 1 อัน)"></textarea>
+            
             <button type="submit" id="post-button" class="mt-4 w-full btn btn-primary">โพสต์ข้อความ</button>
           </form>
         </div>
 
-        <div id="messages-container" class="space-y-4">
-          </div>
+        <div id="messages-container" class="space-y-4"></div>
       </section>
       
       <section id="email-tab" class="hidden">
         <header class="text-center mb-8 py-6">
             <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">📧 จัดการอีเมล</h1>
-            <p class="text-gray-400">บันทึกอีเมลและรหัสผ่านไว้อย่างปลอดภัย (แยกส่วน)</p>
+            <p class="text-gray-400">บันทึกอีเมลและรหัสผ่านไว้อย่างปลอดภัย (ค้นหาและจัดเรียงได้)</p>
         </header>
 
         <div class="p-6 rounded-2xl shadow-2xl mb-8 gradient-border">
@@ -329,36 +276,16 @@
                     </button>
                 </div>
                 <textarea id="quick-paste-input" rows="2" class="quick-paste-area w-full p-3 text-emerald-100 rounded-lg placeholder-emerald-700/50" placeholder="วางข้อมูล เช่น: tongocphunguo14@school.us|Phan9999"></textarea>
-                 <div class="text-xs text-emerald-500/70 mt-1 text-right">ระบบจะแยกช่องให้อัตโนมัติ</div>
+                <div class="text-xs text-emerald-500/70 mt-1 text-right">ระบบจะแยกช่องให้อัตโนมัติ</div>
             </div>
 
             <h3 class="text-lg font-bold mb-4 text-cyan-300">➕ เพิ่มบัญชีใหม่</h3>
             <form id="email-form" class="flex flex-col gap-3">
                 <input id="email-title-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="ชื่อเรียก (ถ้าไม่ใส่จะเป็น วัน/เดือน)" />
-               
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                      <input id="email-addr-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="อีเมล / Username" required />
                     <input id="email-pass-input" type="text" class="w-full p-3 bg-[#16223a] text-white border border-gray-700 rounded-lg focus:border-cyan-400 focus:outline-none" placeholder="รหัสผ่าน (Password)" required />
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2 py-2">
-                    <span class="text-sm text-gray-400">⏳ อายุเมล:</span>
-                    <div class="day-selector flex gap-2">
-                        <input type="radio" name="email-life" id="life-1" value="1">
-                        <label for="life-1">1 วัน</label>
-                        
-                        <input type="radio" name="email-life" id="life-2" value="2">
-                        <label for="life-2">2 วัน</label>
-
-                        <input type="radio" name="email-life" id="life-3" value="3">
-                        <label for="life-3">3 วัน</label>
-
-                        <input type="radio" name="email-life" id="life-4" value="4">
-                        <label for="life-4">4 วัน</label>
-
-                        <input type="radio" name="email-life" id="life-5" value="5" checked>
-                        <label for="life-5">5 วัน</label>
-                    </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-4 py-2">
@@ -366,27 +293,35 @@
                     <div class="flex gap-4">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="email-status" value="0" checked class="w-4 h-4 accent-red-500">
-                            <span class="text-sm">❌</span>
+                            <span class="text-sm">❌ แบน/ไม่ใช้</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="email-status" value="1" class="w-4 h-4 accent-yellow-500">
-                            <span class="text-sm">⏱️</span>
+                            <span class="text-sm">⏱️ รอใช้งาน</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="email-status" value="2" class="w-4 h-4 accent-green-500">
-                            <span class="text-sm">✅</span>
+                            <span class="text-sm">✅ ใช้งานแล้ว</span>
                         </label>
                     </div>
                 </div>
         
                 <button type="submit" class="mt-2 w-full btn btn-primary">💾 บันทึกข้อมูล</button>
-              </form>
+            </form>
+        </div>
+
+        <div class="mb-4 bg-gray-800/80 p-3 rounded-lg border border-gray-700 flex flex-col sm:flex-row gap-3 items-center">
+            <input id="search-email-input" type="text" placeholder="🔍 ค้นหา ชื่อ หรือ อีเมล..." class="w-full sm:flex-1 p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm">
+            <div class="flex gap-2 w-full sm:w-auto items-center">
+                <span class="text-sm text-gray-400 hidden sm:inline">📅 วันที่:</span>
+                <input id="filter-date-input" type="date" class="w-full sm:w-auto p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm">
+                <button id="clear-filter-btn" class="btn btn-ghost px-3 py-2 text-sm whitespace-nowrap">ล้างค่า</button>
+            </div>
         </div>
 
         <div id="loading-state" class="text-center py-10 hidden"><p class="text-gray-400">กำลังโหลดข้อมูล...</p></div>
         
-        <div id="emails-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-       </div>
+        <div id="emails-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
       </section>
 
     </main>
@@ -406,14 +341,13 @@
         if (activeButton) activeButton.classList.add('active-tab');
       }
       buttons.forEach(button => button.addEventListener('click', () => switchTab(button.id.replace('btn-',''))));
-      // Default Tab
       switchTab('address-tab');
     });
   </script>
 
   <script>
   (() => {
-    // 1. DATA CONFIGURATION
+    // 1. DATA CONFIGURATION (Address Generator)
     const ADDRESSES = {
       home: { 
         houseNumber: "82/7", soi: "ลาดกระบัง16", village: "หมู่บ้านไทยสมุทร2", 
@@ -489,7 +423,7 @@
 
     let stats = { generateCount: 0, copyCount: 0 };
     let history = [];
-    // 2. UTILS
+
     const Labels = {
       house: ['บ้านเลขที่', 'เลขที่', 'เลขที่บ้าน', 'House No.', 'Address No.', 'Addr. No.', 'Unit', '#', ''],
       phone: ['โทรศัพท์', 'โทร', 'เบอร์', 'เบอร์โทร', 'Tel', 'Tel.', 'Mobile', 'Contact', 'Contact No.', ''],
@@ -501,65 +435,33 @@
       province: ['จังหวัด', 'จ.', ''],
       postal: ['รหัสไปรษณีย์', 'รหัส', 'Zip', '']
     };
-    const FuzzyLabels = {
-      house: ['บ้านเลๅที่', 'บ้านเลซที่', 'บ้านเxขที่', 'บ้าuเลขที่', 'บๅนเลขที่', 'บ้ๅนเลxที่', 'บาuเลขที่', 'lบๅนเลข', 'H0use No.', 'H๐use', 'Addr. No.', 'Lบ้าน'],
-      phone: ['โทsัพท์', 'โทรsัsท์', 'โทpศัพ', 'โทรsับ', 'เboร์', 'lเบoร์', 'เbอร์', 'โทs', 'T℮l', 'Mob1le', 'C0ntact', 'Tel.'],
-      soi: ['ซoย', 'ซxย', 'ซ0ย'],
-      village: ['หมู่บาu', 'หมู่บ้าu', 'หมูvบาu'],
-      road: ['ถuน', 'ถuv', 'ถvน'],
-      subdistrict: ['ตำบu', 'ตําบล', 'ตxบล'],
-      district: ['อำpอ', 'อำเๅอ', 'อําเภo'],
-      province: ['จังหว้ด', 'จัnหวัด', 'จัJหวัด'],
-      postal: ['รหัสไปsษณีย์', 'รหัnไปรษณีย์', 'รหัสไpรษณีย์']
-    };
     const Separators = [', ', ' ', '  ', '   ', '. ', ' - '];
     const ObfuscationUtils = {
       Punctuation: ['.', ',', '/', '-', '_', '|', ':', '~'],
-      
-      // Removed thai numerals for V3 as requested
       toThaiNumerals: (str) => str.replace(/[0-9]/g, (d) => '๐๑๒๓๔๕๖๗๘๙'[d]),
-
-      // Invisible Zero Width Space for Bot Killer
       addZeroWidthSpaces: (str) => str.split('').join('\u200B'),
-
-      // V4: Subtle Human Typos
       humanTypo: (str) => {
           if (!str || str.length < 4) return str;
-          if (Math.random() < 0.9) return str; // 90% correct
-          
+          if (Math.random() < 0.9) return str;
           const arr = str.split('');
           const idx = Math.floor(Math.random() * arr.length);
-          
-          // Case 1: Double Character (Typo) e.g., "Lat" -> "Latt"
-          if (Math.random() < 0.5) {
-             arr.splice(idx, 0, arr[idx]);
-          } 
-          // Case 2: Missed Character (Typo) e.g., "Road" -> "Rod"
-          else if (arr.length > 3) {
-             arr.splice(idx, 1);
-          }
+          if (Math.random() < 0.5) { arr.splice(idx, 0, arr[idx]); } 
+          else if (arr.length > 3) { arr.splice(idx, 1); }
           return arr.join('');
       },
-      
       injectPunctuation: (str, level) => {
-        // Reduced noise for V4
         const chance = { low: 0, medium: 0.05, high: 0.15, extreme: 0.3, v3: 0.05, v4: 0.05 }[level] || 0;
         if (chance === 0 || !str) return str;
         let result = '';
         for (const char of str) {
           result += char;
           if (Math.random() < chance && char !== ' ' && !ObfuscationUtils.Punctuation.includes(char)) {
-            // V4 uses less weird symbols, mostly dots or dashes
-            if(level === 'v4') {
-                result += (Math.random() < 0.5 ? '.' : '-');
-            } else {
-                result += ObfuscationUtils.Punctuation[Math.floor(Math.random() * ObfuscationUtils.Punctuation.length)];
-            }
+            if(level === 'v4') { result += (Math.random() < 0.5 ? '.' : '-'); } 
+            else { result += ObfuscationUtils.Punctuation[Math.floor(Math.random() * ObfuscationUtils.Punctuation.length)]; }
           }
         }
         return result;
       },
-
       formatNumber: (num) => {
         if (!num) return '';
         const formats = [num, num.replace('/', ' / '), num.replace('/', '-'), `No.${num}`, num.split('').join(' ')];
@@ -571,14 +473,12 @@
         return formats[Math.floor(Math.random() * formats.length)];
       },
       generateVariationCode: () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)] + '0123456789'[Math.floor(Math.random() * 10)],
-      
       getRandomSpacing: () => {
-         const count = Math.floor(Math.random() * 3) + 1; // Less aggressive spacing
+         const count = Math.floor(Math.random() * 3) + 1;
          return ' '.repeat(count);
       }
     };
 
-    // 3. CORE LOGIC
     function generateRandomAddress() {
       const startTime = Date.now();
       const levelElement = document.getElementById('obfuscationSelect');
@@ -588,24 +488,14 @@
       const selectedPhone = PHONES[CURRENT_ADDRESS_KEY];
       const isModernMode = ['v1', 'v2', 'v3', 'v4'].includes(level);
       
-      // Determine Postal Code Format
       let postal = selectedAddress.postalCode;
-      if (level === 'v3' || level === 'v4') {
-          // V3/V4: Must be readable (Arabic only), but maybe spaced out
-          postal = postal.split('').join(Math.random() < 0.3 ? ' ' : '');
-      }
+      if (level === 'v3' || level === 'v4') { postal = postal.split('').join(Math.random() < 0.3 ? ' ' : ''); }
 
-      // Determine Phone Format
       let phoneVal = ObfuscationUtils.formatPhone(selectedPhone);
-      // V3/V4: Arabic only
       
       function pickLang(thaiVal, engVal, type) {
-        // V3: FORCE THAI ONLY (To cut clutter)
         if (level === 'v3') return { value: thaiVal, isEng: false };
-        
-        // V4: Mostly Thai, rarely English
         if (level === 'v4') return { value: (Math.random() < 0.1 && engVal) ? engVal : thaiVal, isEng: false };
-
         if (!engVal) return { value: thaiVal, isEng: false };
         if (Math.random() < 0.4) return { value: engVal, isEng: true };
         return { value: thaiVal, isEng: false };
@@ -615,12 +505,10 @@
       const subData = pickLang(selectedAddress.subdistrict, selectedAddress.subdistrict_en, 'subdistrict');
       const distData = pickLang(selectedAddress.district, selectedAddress.district_en, 'district');
       const provData = pickLang(selectedAddress.province, selectedAddress.province_en, 'province');
-      
       const getLabelPool = (originalPool, isEng) => { if(isEng) return ['']; return originalPool; };
       
       let houseVal = selectedAddress.houseNumber;
       if (isModernMode) {
-          // V4: Lazy formatting e.g. 82-7 instead of 82/7
           if (level === 'v4' && Math.random() < 0.3) houseVal = houseVal.replace('/', '-');
       } else {
           houseVal = `<mark class="house-highlight">${ObfuscationUtils.formatNumber(houseVal)}</mark>`;
@@ -644,18 +532,13 @@
           const phone = allComponents.find(c => c.type === 'phone');
           const postal = allComponents.find(c => c.type === 'postal');
           let others = allComponents.filter(c => c.type !== 'house' && c.type !== 'phone' && c.type !== 'postal');
-          
-          if (level === 'v2') {
-             // Scramble middle parts only
-             others = others.sort(() => 0.5 - Math.random());
-          }
-          // V3/V4: Keep logical order for readability, just mess with spacing/chars
+          if (level === 'v2') { others = others.sort(() => 0.5 - Math.random()); }
           
           componentsToUse = [];
           if(house) componentsToUse.push(house);
           componentsToUse = componentsToUse.concat(others);
-          if(postal) componentsToUse.push(postal); // Postal at end usually
-          if(phone) componentsToUse.push(phone); // Phone at end
+          if(postal) componentsToUse.push(postal);
+          if(phone) componentsToUse.push(phone);
       } else {
           const required = allComponents.filter(c => c.required);
           const optional = allComponents.filter(c => !c.required);
@@ -668,24 +551,12 @@
         let label = labelPool[Math.floor(Math.random() * labelPool.length)];
         const isEnglishLabel = (label === ''); 
 
-        // Label Logic
         let showLabel = true;
-        
-        // V3: HIDE LABELS (Road, Moo, Soi) to be clean but bot-confusing
-        if (level === 'v3' && ['road', 'soi', 'village', 'district', 'subdistrict', 'province'].includes(comp.type)) {
-            showLabel = false;
-        }
-
-        // V4: Lazy labels (use '.' or nothing)
-        if (level === 'v4' && Math.random() < 0.4) {
-             label = ".";
-        }
+        if (level === 'v3' && ['road', 'soi', 'village', 'district', 'subdistrict', 'province'].includes(comp.type)) { showLabel = false; }
+        if (level === 'v4' && Math.random() < 0.4) { label = "."; }
 
         let value = comp.value;
-
-        // V3: Invisible Space Injection (The core feature)
         if (level === 'v3') {
-            // Inject zero-width space randomly inside the value
             const chars = value.split('');
             for(let i=0; i<chars.length; i++) {
                 if(Math.random() < 0.5) chars[i] = chars[i] + '\u200B';
@@ -693,7 +564,6 @@
             value = chars.join('');
         }
 
-        // V4: Human Typo & Lazy Punctuation
         if (level === 'v4') {
              value = ObfuscationUtils.humanTypo(value);
              value = ObfuscationUtils.injectPunctuation(value, 'v4');
@@ -704,12 +574,10 @@
         let part = '';
         if (showLabel && label) {
              part = `${label} ${value}`;
-             // V4: Lazy spacing (e.g. "Soi.Lardkrabang")
              if (level === 'v4') part = `${label}${Math.random() < 0.5 ? '.' : ' '}${value}`;
         } else {
              part = value;
         }
-
         return part.trim();
       });
 
@@ -719,9 +587,7 @@
           let sep;
           if (isModernMode) {
               sep = ObfuscationUtils.getRandomSpacing();
-              // V3: Clean spacing
-              // V4: Lazy separator
-              if (level === 'v4') sep = (Math.random() < 0.3 ? '.' : '  '); 
+              if (level === 'v4') sep = (Math.random() < 0.3 ? '.' : '  ');
           } else {
               sep = Separators[Math.floor(Math.random() * Separators.length)];
           }
@@ -748,14 +614,13 @@
       updateHistoryDisplay();
     }
 
-    // 4. UI HANDLERS
     function updateHistoryDisplay() {
       const container = document.getElementById('historyContainer');
       if (history.length === 0) {
         container.innerHTML = '<div class="text-center text-gray-500 text-sm">ยังไม่มีประวัติ</div>';
         return;
       }
-      container.innerHTML = history.map((item, index) => `
+      container.innerHTML = history.map((item) => `
         <div class="bg-gray-800 p-3 rounded-lg text-sm">
           <div class="flex justify-between items-center mb-2">
             <span class="text-purple-400 font-mono">${item.variation}</span>
@@ -783,8 +648,7 @@
       document.getElementById('obfuscationLevel').textContent = '🔒';
     }
 
-    function generateNew() { generateRandomAddress();
-    }
+    function generateNew() { generateRandomAddress(); }
     
     const genBtn = document.getElementById('generateBtn');
     if(genBtn) genBtn.addEventListener('click', generateNew);
@@ -807,21 +671,18 @@
       const fontSize = 10;
       const columns = canvas.width / fontSize;
       const drops = [];
-      for (let x = 0; 
-        x < columns; x++) { drops[x] = 1; }
+      for (let x = 0; x < columns; x++) { drops[x] = 1; }
       function draw() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#0F3';
         ctx.font = fontSize + 'px monospace';
         for (let i = 0; i < drops.length; i++) {
-          const text 
-= matrixArray[Math.floor(Math.random() * matrixArray.length)];
+          const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
           ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0;
-}
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
           drops[i]++;
-}
+        }
       }
       setInterval(draw, 35);
       window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
@@ -842,9 +703,14 @@
     let messageIdToDelete = null;
     let messageIdToEdit = null;
     let isEditingEmailMode = false;
+    
+    // Global Data State for Filtering
+    let currentEmailsList = [];
+
     // Elements - Messages
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
+    const extraLinksInput = document.getElementById('extra-links-input');
     const titleInput = document.getElementById('title-input');
     const messagesContainer = document.getElementById('messages-container');
     
@@ -854,6 +720,12 @@
     const emailAddrInput = document.getElementById('email-addr-input');
     const emailPassInput = document.getElementById('email-pass-input');
     const emailsContainer = document.getElementById('emails-container');
+    
+    // Elements - Email Filters
+    const searchEmailInput = document.getElementById('search-email-input');
+    const filterDateInput = document.getElementById('filter-date-input');
+    const clearFilterBtn = document.getElementById('clear-filter-btn');
+
     // Quick Paste Element
     const quickPasteInput = document.getElementById('quick-paste-input');
     const btnPasteClipboard = document.getElementById('btn-paste-clipboard');
@@ -870,33 +742,33 @@
     const editModal = document.getElementById('editModal');
     const editTitleInput = document.getElementById('editTitleInput');
     const editMessageInput = document.getElementById('editMessageInput');
-    // New Edit Inputs for Email
+    const editExtraMessageInput = document.getElementById('editExtraMessageInput');
+
     const editMessageContainer = document.getElementById('editMessageContainer');
     const editEmailContainer = document.getElementById('editEmailContainer');
     const editEmailField = document.getElementById('editEmailField');
     const editPasswordField = document.getElementById('editPasswordField');
-    const editExpiryDaysField = document.getElementById('editExpiryDaysField');
 
     const editCancelBtn = document.getElementById('editCancelBtn');
     const editSaveBtn = document.getElementById('editSaveBtn');
+
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function main(){
       boardIdDisplay.textContent = appId;
       try{
         listenForMessages();
-      }catch(error){ console.error("Error initializing Supabase:", error); loadingState.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์";
-}
+      }catch(error){ console.error("Error initializing Supabase:", error); loadingState.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์"; }
     }
 
     function listenForMessages(){
-      if (messagesChannel) { sb.removeChannel(messagesChannel);
-}
+      if (messagesChannel) { sb.removeChannel(messagesChannel); }
       loadAndRender();
+      // ระบบ Realtime ของ Supabase: ทำงานครอบคลุมทั้งการโพสต์ใหม่, การแก้ไขอัปเดต และการลบ ทันทีบนทุกอุปกรณ์!
       messagesChannel = sb.channel('links-realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'links' }, () => { loadAndRender(); })
         .subscribe();
-}
+    }
 
     async function loadAndRender(){
       loadingState.style.display = 'block';
@@ -904,83 +776,94 @@
         .from('links')
         .select('id, title, url, created_at, is_pinned')
         .order('created_at', { ascending: false });
+      
       loadingState.style.display = 'none';
 
-      if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>`; return;
-}
+      if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>`; return; }
 
-      // แยกข้อมูล Messages และ Emails
       const allData = (data || []).map(row => ({
         id: row.id,
         title: row.title || '',
         rawUrl: row.url || '',
         isPinned: !!row.is_pinned,
         timestamp: { toDate: () => new Date(row.created_at) },
-        created_at: row.created_at // Keep raw string for math
+        created_at: row.created_at 
       }));
+
       const emails = [];
       const messages = [];
 
       allData.forEach(item => {
           if (item.rawUrl.startsWith(EMAIL_PREFIX)) {
-              // Parse email data
               const content = item.rawUrl.replace(EMAIL_PREFIX, '');
               const parts = content.split(EMAIL_SEPARATOR);
               item.email = parts[0] || '';
               item.password = parts[1] || '';
-              item.expiryDays = parseInt(parts[2]) || 1; // Default to 1 day if not set
-              item.status = parts[3] || '0'; // Default to '0' (❌)
+              // Index 2 used to be days, Index 3 is status. Kept compatible with old DB saves.
+              item.status = parts.length > 3 ? parts[3] : (parts[2] && parts[2].length === 1 ? parts[2] : '0'); 
               emails.push(item);
           } else {
-              // Normal message
-              item.text = item.rawUrl;
+              // Parse Link/Code Splitter
+              if (item.rawUrl.includes('\n|||EXTRA|||\n')) {
+                  const parts = item.rawUrl.split('\n|||EXTRA|||\n');
+                  item.text = parts[0];
+                  item.extra = parts[1];
+              } else {
+                  item.text = item.rawUrl;
+                  item.extra = '';
+              }
               messages.push(item);
           }
       });
+
       // Sort messages by pin
       messages.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;
         return 0;
       });
+
+      currentEmailsList = emails; // Store for filtering
+
       renderMessages(messages);
-      renderEmails(emails);
+      renderFilteredEmails();
     }
 
     // --- POSTING FUNCTIONS ---
 
-    async function postMessage(text, title){
-      if (!text.trim()) return;
+    async function postMessage(text, title, extraText){
+      if (!text.trim() && !extraText.trim()) return;
+      
+      let finalUrl = text;
+      if (extraText && extraText.trim()) {
+          finalUrl = text + '\n|||EXTRA|||\n' + extraText.trim();
+      }
+
       try{
-        const { error } = await sb.from('links').insert([{ title: title||'', url: text, is_pinned: false }]);
+        const { error } = await sb.from('links').insert([{ title: title||'', url: finalUrl, is_pinned: false }]);
         if (error) throw error;
-        messageInput.value=''; titleInput.value='';
-        showToast("โพสต์ข้อความเรียบร้อย");
-      }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ");
-}
+        messageInput.value=''; titleInput.value=''; extraLinksInput.value='';
+        showToast("โพสต์ข้อความและลิ้งค์เรียบร้อย");
+      }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ"); }
     }
 
-    async function postEmail(title, email, password, days, status = '0') {
+    // Removed `days` from parameters
+    async function postEmail(title, email, password, status = '0') {
         if (!email.trim() || !password.trim()) return;
-        // --- 1. Auto Generate Title as Date/Month if Empty ---
         let finalTitle = title.trim();
         if (!finalTitle) {
             const d = new Date();
-            const day = d.getDate();
-            const month = d.getMonth() + 1;
-            finalTitle = `${day}/${month}`;
-            // e.g., "2/2"
+            finalTitle = `${d.getDate()}/${d.getMonth() + 1}`;
         }
 
-        // --- 2. Combine into vault format with Expiry Days and Status ---
-        // Format: vault://email|::|password|::|days|::|status
-        const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}${EMAIL_SEPARATOR}${days}${EMAIL_SEPARATOR}${status}`;
+        // Add dummy '0' for days to keep backwards compatibility with index splitting
+        const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}${EMAIL_SEPARATOR}0${EMAIL_SEPARATOR}${status}`;
         try {
             const { error } = await sb.from('links').insert([{ title: finalTitle, url: secureString, is_pinned: false }]);
             if (error) throw error;
             emailTitleInput.value = ''; emailAddrInput.value = ''; emailPassInput.value = '';
             showToast("บันทึกอีเมลเรียบร้อย!");
-} catch(error) { console.error("Error posting email:", error); alert("เกิดข้อผิดพลาดในการบันทึกอีเมล"); }
+        } catch(error) { console.error("Error posting email:", error); alert("เกิดข้อผิดพลาดในการบันทึกอีเมล"); }
     }
 
     // --- RENDER FUNCTIONS ---
@@ -989,14 +872,43 @@
       messagesContainer.innerHTML='';
       if (messages.length===0){ messagesContainer.innerHTML = `<p class="text-center text-gray-400">ยังไม่มีข้อความ</p>`; return; }
       messages.forEach(msg => { messagesContainer.appendChild(createMessageElement(msg)); });
-}
+    }
 
-    function renderEmails(emails) {
+    function renderFilteredEmails() {
+        const searchTerm = searchEmailInput.value.toLowerCase();
+        const dateTerm = filterDateInput.value;
+
+        const filtered = currentEmailsList.filter(mail => {
+            const titleMatch = mail.title.toLowerCase().includes(searchTerm);
+            const emailMatch = mail.email.toLowerCase().includes(searchTerm);
+            const matchesSearch = titleMatch || emailMatch;
+
+            let matchesDate = true;
+            if (dateTerm) {
+                // Parse created_at to YYYY-MM-DD
+                const mailDate = new Date(mail.created_at).toLocaleDateString('en-CA'); // Gets YYYY-MM-DD format
+                matchesDate = (mailDate === dateTerm);
+            }
+
+            return matchesSearch && matchesDate;
+        });
+
         emailsContainer.innerHTML = '';
-        if (emails.length === 0) { emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ยังไม่มีอีเมลที่บันทึกไว้</p>`; return;
-}
-        emails.forEach(mail => { emailsContainer.appendChild(createEmailCard(mail)); });
-}
+        if (filtered.length === 0) { 
+            emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ไม่พบอีเมลที่ค้นหา</p>`; 
+            return;
+        }
+        filtered.forEach(mail => { emailsContainer.appendChild(createEmailCard(mail)); });
+    }
+
+    // Add Filter Listeners
+    searchEmailInput.addEventListener('input', renderFilteredEmails);
+    filterDateInput.addEventListener('change', renderFilteredEmails);
+    clearFilterBtn.addEventListener('click', () => {
+        searchEmailInput.value = '';
+        filterDateInput.value = '';
+        renderFilteredEmails();
+    });
 
     // --- CARD CREATION ---
 
@@ -1004,56 +916,82 @@
       const div = document.createElement('div');
       div.className = `p-5 rounded-xl flex flex-col gap-4 fade-in gradient-border transition-transform duration-300 hover:scale-[1.02] ${msg.isPinned ? 'pinned-message' : ''}`;
       let content = '';
-      if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`;
-}
-      content += `<p class="text-cyan-100 whitespace-pre-wrap flex-1 text-base">${escapeHTML(msg.text)}</p>`;
-      content += `<div class="flex items-center justify-between gap-4 w-full pt-2 border-t border-cyan-800/50">
-        <span class="text-xs" style="color:#93c5fd">${msg.timestamp ?
-new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
+      if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`; }
+      
+      // Main Message
+      if (msg.text && msg.text.trim()) {
+         content += `<p class="text-cyan-100 whitespace-pre-wrap flex-1 text-base">${escapeHTML(msg.text)}</p>`;
+      }
+
+      // Extra Links / Codes Processing
+      if (msg.extra && msg.extra.trim()) {
+          const lines = msg.extra.split('\n').filter(l => l.trim() !== '');
+          if (lines.length > 0) {
+              content += `<div class="flex flex-col gap-2 mt-2 pt-3 border-t border-cyan-800/30">`;
+              lines.forEach(line => {
+                  const trimmed = line.trim();
+                  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                      content += `<a href="${trimmed}" target="_blank" class="btn btn-secondary py-2 px-4 text-sm inline-flex justify-center md:justify-start w-full md:w-auto shadow-md hover:scale-[1.02] transition-transform">🔗 กดเปิดลิ้งค์: <span class="truncate max-w-[200px] ml-2 font-normal">${escapeHTML(trimmed)}</span></a>`;
+                  } else {
+                      const safeCode = escapeHTML(trimmed);
+                      content += `<button class="btn btn-primary btn-copy-extra py-2 px-4 text-sm inline-flex justify-center md:justify-start w-full md:w-auto shadow-md hover:scale-[1.02] transition-transform" data-code="${safeCode}">📋 คัดลอกโค้ด: <span class="font-mono ml-2 font-normal">${safeCode}</span></button>`;
+                  }
+              });
+              content += `</div>`;
+          }
+      }
+
+      content += `<div class="flex items-center justify-between gap-4 w-full pt-4 border-t border-cyan-800/50 mt-2">
+        <span class="text-xs" style="color:#93c5fd">${msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          ${msg.isPinned ?
-'<span class="text-yellow-400 text-lg">📌</span>' : ''}
-          <button class="pin-button btn btn-primary py-1 px-3 rounded-full text-sm">${msg.isPinned ?
-'เลิกปัก' : 'ปักหมุด'}</button>
-          <button class="copy-button btn btn-primary py-1 px-3 rounded-full text-sm">คัดลอก</button>
+          ${msg.isPinned ? '<span class="text-yellow-400 text-lg">📌</span>' : ''}
+          <button class="pin-button btn btn-primary py-1 px-3 rounded-full text-sm">${msg.isPinned ? 'เลิกปัก' : 'ปักหมุด'}</button>
+          <button class="copy-button btn btn-primary py-1 px-3 rounded-full text-sm">คัดลอกข้อความหลัก</button>
           <button class="edit-button btn btn-secondary py-1 px-3 rounded-full text-sm">✏️ แก้ไข</button>
           <button class="delete-button btn btn-danger py-1 px-3 rounded-full text-sm">🗑️ ลบ</button>
         </div>
       </div>`;
+      
       div.innerHTML = content;
-      div.querySelector('.copy-button').onclick = (e) => { copyTextToClipboard(msg.text, e.target); };
+      
+      // Handlers
+      const copyBtn = div.querySelector('.copy-button');
+      if(copyBtn) {
+         copyBtn.onclick = (e) => { copyTextToClipboard(msg.text, e.target); };
+      }
+      
+      // Extra copy buttons
+      div.querySelectorAll('.btn-copy-extra').forEach(btn => {
+          btn.onclick = (e) => { copyTextToClipboard(btn.dataset.code, e.currentTarget); };
+      });
+
       div.querySelector('.pin-button').onclick = () => { togglePinMessage(msg.id); };
       div.querySelector('.delete-button').onclick = () => { openDeleteModal(msg.id); };
-      div.querySelector('.edit-button').onclick = () => { openEditModal(msg.id, msg.title, msg.text, false); };
+      div.querySelector('.edit-button').onclick = () => { openEditModal(msg.id, msg.title, msg.text, false, '', '', '0', msg.extra); };
       return div;
-}
+    }
 
     function createEmailCard(data) {
         const div = document.createElement('div');
-        // --- 3. Expiry Calculation Logic ---
         const createdDate = new Date(data.created_at);
-        const expiryMs = data.expiryDays * 24 * 60 * 60 * 1000;
-        const expireDate = new Date(createdDate.getTime() + expiryMs);
-        const now = new Date();
-        const diffMs = expireDate - now;
-        const diffHours = diffMs / (1000 * 60 * 60);
 
         let statusClass = '';
         let statusText = '';
-        if (diffMs < 0) {
-            statusClass = 'email-status-expired';
-            statusText = 'หมดอายุแล้ว ❌';
-        } else if (diffHours <= 24) {
-            statusClass = 'email-status-warning';
-            statusText = `เหลือเวลา < 1 วัน ⚠️`;
-        } else {
-            statusClass = 'email-status-good';
-            const daysLeft = Math.ceil(diffHours / 24);
-            statusText = `เหลือ ${daysLeft} วัน ✅`;
-        }
+        let statusIcon = '❌';
 
-        const statusIcons = { '0': '❌', '1': '⏱️', '2': '✅' };
-        const currentStatusIcon = statusIcons[data.status] || '❌';
+        if (data.status === '2') {
+            statusClass = 'email-status-good';
+            statusText = 'ใช้งานแล้ว ✅';
+            statusIcon = '✅';
+        } else if (data.status === '1') {
+            statusClass = 'email-status-warning';
+            statusText = 'รอใช้งาน ⏱️';
+            statusIcon = '⏱️';
+        } else {
+            statusClass = 'email-status-expired';
+            statusText = 'ไม่ได้ใช้/แบน ❌';
+            statusIcon = '❌';
+        }
 
         // Apply classes
         div.className = `p-5 rounded-xl flex flex-col gap-3 gradient-border email-card transition-transform duration-300 hover:scale-[1.01] ${statusClass}`;
@@ -1062,7 +1000,7 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
                 <div>
                     <div class="font-bold text-lg text-white flex items-center gap-2">
                         <span>${escapeHTML(data.title)}</span>
-                        <button class="quick-status-btn text-base hover:scale-125 transition-transform" title="คลิกเพื่อเปลี่ยนสถานะ">${currentStatusIcon}</button>
+                        <button class="quick-status-btn text-base hover:scale-125 transition-transform" title="คลิกเพื่อเปลี่ยนสถานะ">${statusIcon}</button>
                     </div>
                     <div class="text-xs text-gray-400 mt-1 font-mono">${statusText}</div>
                 </div>
@@ -1094,6 +1032,7 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         // Handlers
         const passMask = div.querySelector('.password-mask');
         const passText = div.querySelector('.password-text');
+        
         div.querySelector('.toggle-pass').onclick = (e) => {
             passMask.classList.toggle('hidden');
             passText.classList.toggle('hidden');
@@ -1104,9 +1043,9 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         div.querySelector('.copy-pass').onclick = (e) => copyTextToClipboard(data.password, e.target);
         div.querySelector('.del-btn').onclick = () => openDeleteModal(data.id);
         
-        // Pass existing days and status to edit modal
-        div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password, data.expiryDays, data.status);
-
+        // Expiry removed, pass '0' for days
+        div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password, data.status, '');
+        
         // Quick Status Change Handler
         div.querySelector('.quick-status-btn').onclick = async (e) => {
             const statusOrder = ['0', '1', '2']; // ❌ -> ⏱️ -> ✅
@@ -1119,11 +1058,10 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             btn.textContent = '⏳';
             
             try {
-                const newUrl = `${EMAIL_PREFIX}${data.email}${EMAIL_SEPARATOR}${data.password}${EMAIL_SEPARATOR}${data.expiryDays}${EMAIL_SEPARATOR}${nextStatus}`;
+                const newUrl = `${EMAIL_PREFIX}${data.email}${EMAIL_SEPARATOR}${data.password}${EMAIL_SEPARATOR}0${EMAIL_SEPARATOR}${nextStatus}`;
                 const { error } = await sb.from('links').update({ url: newUrl }).eq('id', data.id);
                 if (error) throw error;
                 showToast("อัปเดตสถานะแล้ว!");
-                // Note: Realtime listener will handle the UI update
             } catch (err) {
                 console.error("Quick status update error:", err);
                 btn.textContent = originalIcon;
@@ -1143,7 +1081,7 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
     function closeDeleteModal() {
         messageIdToDelete = null;
         confirmModal.classList.add('hidden');
-}
+    }
     modalCancelBtn.onclick = closeDeleteModal;
     modalConfirmBtn.onclick = async () => {
         if (messageIdToDelete) {
@@ -1162,41 +1100,37 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             }
         }
     };
-    // --- EDIT LOGIC (UPDATED FOR EMAIL) ---
-    let editingEmailDays = 1;
-    // Store original days when editing
 
-    function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '', currentDays = 1, currentStatus = '0') {
+    // --- EDIT LOGIC ---
+
+    function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '', currentStatus = '0', extraText = '') {
         messageIdToEdit = id;
         isEditingEmailMode = isEmail;
         editTitleInput.value = currentTitle;
 
         if (isEmail) {
-            // Show Email Inputs
             editMessageContainer.classList.add('hidden');
             editEmailContainer.classList.remove('hidden');
             editEmailField.value = emailVal;
             editPasswordField.value = passVal;
-            editExpiryDaysField.value = currentDays;
             
-            // Set status radio
             const statusRadios = document.getElementsByName('edit-email-status');
             statusRadios.forEach(r => {
                 if (r.value === currentStatus) r.checked = true;
             });
         } else {
-            // Show Message Textarea
             editMessageContainer.classList.remove('hidden');
             editEmailContainer.classList.add('hidden');
-            editMessageInput.value = currentText;
+            editMessageInput.value = currentText || '';
+            editExtraMessageInput.value = extraText || '';
         }
         editModal.classList.remove('hidden');
-}
+    }
 
     function closeEditModal() {
         messageIdToEdit = null;
         editModal.classList.add('hidden');
-}
+    }
     editCancelBtn.onclick = closeEditModal;
 
     editSaveBtn.onclick = async () => {
@@ -1207,17 +1141,21 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
         if (isEditingEmailMode) {
              const e = editEmailField.value.trim();
              const p = editPasswordField.value.trim();
-             const d = editExpiryDaysField.value.trim() || '1';
              const s = document.querySelector('input[name="edit-email-status"]:checked').value;
              
              if (!e || !p) { alert("กรุณากรอกข้อมูลให้ครบ"); return; }
              
-             newUrl = `${EMAIL_PREFIX}${e}${EMAIL_SEPARATOR}${p}${EMAIL_SEPARATOR}${d}${EMAIL_SEPARATOR}${s}`;
-} else {
+             newUrl = `${EMAIL_PREFIX}${e}${EMAIL_SEPARATOR}${p}${EMAIL_SEPARATOR}0${EMAIL_SEPARATOR}${s}`;
+        } else {
              const t = editMessageInput.value;
-             if (!t.trim()) { alert("กรุณาใส่ข้อความ"); return; }
+             const xt = editExtraMessageInput.value;
+             if (!t.trim() && !xt.trim()) { alert("กรุณาใส่ข้อความหรือลิ้งค์"); return; }
+             
              newUrl = t;
-}
+             if (xt && xt.trim()) {
+                 newUrl = t + '\n|||EXTRA|||\n' + xt.trim();
+             }
+        }
 
         const originalText = editSaveBtn.innerText;
         editSaveBtn.innerText = "กำลังบันทึก...";
@@ -1231,13 +1169,12 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             alert("บันทึกไม่สำเร็จ: " + error.message);
         } finally {
             editSaveBtn.innerText = originalText;
-}
+        }
     };
 
     // --- QUICK PASTE LISTENER ---
     if(quickPasteInput) {
         const handlePasteInput = (val) => {
-             // Detect Email|Pass pattern
             if (val.includes('|')) {
                 const parts = val.split('|');
                 if(parts.length >= 2) {
@@ -1248,69 +1185,61 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
                         emailAddrInput.value = email;
                         emailPassInput.value = pass;
                         
-                        // Auto-fill title with username part of email if empty (Optional override by Date later)
                         if(!emailTitleInput.value) {
                              emailTitleInput.value = email.split('@')[0];
-}
+                        }
                         
-                        // Clear the paste area for clean feeling
                         quickPasteInput.value = '';
                         showToast("แยกข้อมูล Email/Pass ให้แล้ว!");
-                        // Optional: Highlight the save button
                         document.querySelector('#email-form button[type="submit"]').focus();
-}
+                    }
                 }
             }
         };
         quickPasteInput.addEventListener('input', (e) => handlePasteInput(e.target.value));
         
-        // NEW: Paste Button Handler
         if(btnPasteClipboard) {
             btnPasteClipboard.addEventListener('click', async () => {
                 try {
                     const text = await navigator.clipboard.readText();
-                    if (!text) { showToast('Clipboard ว่างเปล่า'); return; 
- 
-                    }
+                    if (!text) { showToast('Clipboard ว่างเปล่า'); return; }
                     quickPasteInput.value = text;
-                    handlePasteInput(text); // Trigger logic manually
+                    handlePasteInput(text);
                 } catch(err) {
-                
                     console.error('Failed to read clipboard', err);
                     alert('กรุณาอนุญาตการเข้าถึง Clipboard หรือใช้ Ctrl+V แทน');
                 }
             });
-}
+        }
     }
 
     // --- UTILS ---
 
-    function escapeHTML(str){ const p = document.createElement('p');
-    p.textContent = str;
-    return p.innerHTML; }
+    function escapeHTML(str){ 
+        const p = document.createElement('p');
+        p.textContent = str;
+        return p.innerHTML; 
+    }
     
     // Forms Submit
-    messageForm.addEventListener('submit', (e) => { e.preventDefault(); postMessage(messageInput.value, titleInput.value); });
+    messageForm.addEventListener('submit', (e) => { 
+        e.preventDefault(); 
+        postMessage(messageInput.value, titleInput.value, extraLinksInput.value); 
+    });
+    
     emailForm.addEventListener('submit', (e) => { 
         e.preventDefault(); 
-        
-        // Get Selected Day
-        const selectedLife = document.querySelector('input[name="email-life"]:checked');
-        const days = selectedLife ? selectedLife.value : 5; // Default 5
-
-        // Get Selected Status
         const selectedStatus = document.querySelector('input[name="email-status"]:checked');
         const status = selectedStatus ? selectedStatus.value : '0';
-
-        postEmail(emailTitleInput.value, emailAddrInput.value, emailPassInput.value, days, status); 
+        postEmail(emailTitleInput.value, emailAddrInput.value, emailPassInput.value, status); 
     });
+    
     async function togglePinMessage(messageId) {
       const { data, error } = await sb.from('links').select('is_pinned').eq('id', messageId).single();
       if (error){ console.error('togglePin read error:', error); return; }
       const currentPinnedStatus = !!data.is_pinned;
       const { error: upErr } = await sb.from('links').update({ is_pinned: !currentPinnedStatus }).eq('id', messageId);
-      if (upErr){ console.error('togglePin update error:', upErr);
-}
+      if (upErr){ console.error('togglePin update error:', upErr); }
     }
 
     function showToast(msg = 'คัดลอกข้อความแล้ว!'){ 
@@ -1321,18 +1250,19 @@ new Date(msg.timestamp.toDate()).toLocaleString('th-TH') : '...'}</span>
             toast.classList.remove('opacity-100','translate-y-0'); 
             toast.classList.add('opacity-0','translate-y-10'); 
         }, 2000);
-}
+    }
     
     function copyTextToClipboard(text, button){ 
         navigator.clipboard.writeText(text).then(() => { 
             showToast(); 
             if (button && button.tagName === 'BUTTON'){ 
-                const oldText = button.textContent;
-                button.textContent = 'สำเร็จ!'; 
-                setTimeout(() => { button.textContent = oldText; }, 2000); 
+                // Store original HTML instead of just text to preserve emojis
+                const oldHTML = button.innerHTML;
+                button.innerHTML = '✅ สำเร็จ!'; 
+                setTimeout(() => { button.innerHTML = oldHTML; }, 2000); 
             } 
         }).catch(err => { console.error('Failed to copy text: ', err); });
-}
+    }
 
     main();
   </script>
