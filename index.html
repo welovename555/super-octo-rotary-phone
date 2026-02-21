@@ -88,7 +88,7 @@
     .email-field { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
     .password-dot { font-family: sans-serif; letter-spacing: 2px; font-size: 1.2rem; line-height: 1; color: var(--muted); }
     
-    /* Email Status Styles (Updated) */
+    /* Email Status Styles */
     .email-status-good { border: 1px solid rgba(34, 197, 94, 0.5); box-shadow: 0 0 15px rgba(34, 197, 94, 0.1); }
     .email-status-warning { border: 1px solid rgba(234, 179, 8, 0.5); box-shadow: 0 0 15px rgba(234, 179, 8, 0.1); }
     .email-status-expired { border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(17, 24, 39, 0.8); }
@@ -251,8 +251,13 @@
             <label for="message-input" class="block text-lg font-semibold mb-2" style="color:#93c5fd">ข้อความของคุณ:</label>
             <textarea id="message-input" rows="4" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="พิมพ์ข้อความที่นี่... (เช่น ที่อยู่จัดส่ง)"></textarea>
             
-            <label for="extra-links-input" class="block text-lg font-semibold mb-2 mt-4" style="color:#93c5fd">ลิ้งค์ หรือ โค้ด (แยกบรรทัด):</label>
-            <textarea id="extra-links-input" rows="2" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่ลิ้งค์ Shopee หรือ โค้ดต่างๆ (บรรทัดละ 1 อัน)"></textarea>
+            <div class="flex justify-between items-end mb-2 mt-4">
+                <label for="extra-links-input" class="block text-lg font-semibold" style="color:#93c5fd">ลิ้งค์ หรือ โค้ด (แยกบรรทัด):</label>
+                <button type="button" id="btn-paste-board-extra" class="text-xs bg-cyan-600 text-white px-3 py-1.5 rounded-lg hover:bg-cyan-500 transition-colors shadow-lg flex items-center gap-1 border border-cyan-400/50">
+                    📋 วางแล้วแยกให้อัตโนมัติ
+                </button>
+            </div>
+            <textarea id="extra-links-input" rows="2" class="w-full p-3 bg-[#16223a] text-cyan-100 border border-cyan-700 focus:border-cyan-400 focus:ring-0 rounded-lg transition placeholder:text-cyan-700" placeholder="ใส่ลิ้งค์ (จะคลิกเปิดได้) หรือ โค้ดต่างๆ (จะกดคัดลอกได้) - บรรทัดละ 1 อัน"></textarea>
             
             <button type="submit" id="post-button" class="mt-4 w-full btn btn-primary">โพสต์ข้อความ</button>
           </form>
@@ -310,11 +315,13 @@
             </form>
         </div>
 
-        <div class="mb-4 bg-gray-800/80 p-3 rounded-lg border border-gray-700 flex flex-col sm:flex-row gap-3 items-center">
-            <input id="search-email-input" type="text" placeholder="🔍 ค้นหา ชื่อ หรือ อีเมล..." class="w-full sm:flex-1 p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm">
-            <div class="flex gap-2 w-full sm:w-auto items-center">
-                <span class="text-sm text-gray-400 hidden sm:inline">📅 วันที่:</span>
-                <input id="filter-date-input" type="date" class="w-full sm:w-auto p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm">
+        <div class="mb-4 bg-gray-800/80 p-3 rounded-lg border border-gray-700 flex flex-col md:flex-row gap-3 items-center">
+            <input id="search-email-input" type="text" placeholder="🔍 ค้นหา ชื่อ หรือ อีเมล..." class="w-full md:flex-1 p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm">
+            <div class="flex gap-2 w-full md:w-auto items-center flex-wrap sm:flex-nowrap">
+                <span class="text-sm text-gray-400 hidden sm:inline whitespace-nowrap">📅 ช่วงวันที่:</span>
+                <input id="filter-date-start" type="date" class="flex-1 sm:w-auto p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm" title="วันที่เริ่มต้น">
+                <span class="text-gray-400">-</span>
+                <input id="filter-date-end" type="date" class="flex-1 sm:w-auto p-2 bg-[#16223a] text-white border border-gray-600 rounded-lg focus:border-cyan-400 focus:outline-none text-sm" title="วันที่สิ้นสุด">
                 <button id="clear-filter-btn" class="btn btn-ghost px-3 py-2 text-sm whitespace-nowrap">ล้างค่า</button>
             </div>
         </div>
@@ -423,7 +430,6 @@
 
     let stats = { generateCount: 0, copyCount: 0 };
     let history = [];
-
     const Labels = {
       house: ['บ้านเลขที่', 'เลขที่', 'เลขที่บ้าน', 'House No.', 'Address No.', 'Addr. No.', 'Unit', '#', ''],
       phone: ['โทรศัพท์', 'โทร', 'เบอร์', 'เบอร์โทร', 'Tel', 'Tel.', 'Mobile', 'Contact', 'Contact No.', ''],
@@ -492,7 +498,6 @@
       if (level === 'v3' || level === 'v4') { postal = postal.split('').join(Math.random() < 0.3 ? ' ' : ''); }
 
       let phoneVal = ObfuscationUtils.formatPhone(selectedPhone);
-      
       function pickLang(thaiVal, engVal, type) {
         if (level === 'v3') return { value: thaiVal, isEng: false };
         if (level === 'v4') return { value: (Math.random() < 0.1 && engVal) ? engVal : thaiVal, isEng: false };
@@ -703,16 +708,16 @@
     let messageIdToDelete = null;
     let messageIdToEdit = null;
     let isEditingEmailMode = false;
-    
     // Global Data State for Filtering
     let currentEmailsList = [];
-
+    
     // Elements - Messages
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
     const extraLinksInput = document.getElementById('extra-links-input');
     const titleInput = document.getElementById('title-input');
     const messagesContainer = document.getElementById('messages-container');
+    const btnPasteBoardExtra = document.getElementById('btn-paste-board-extra');
     
     // Elements - Emails
     const emailForm = document.getElementById('email-form');
@@ -721,11 +726,12 @@
     const emailPassInput = document.getElementById('email-pass-input');
     const emailsContainer = document.getElementById('emails-container');
     
-    // Elements - Email Filters
+    // Elements - Email Filters (Updated with Start-End Date)
     const searchEmailInput = document.getElementById('search-email-input');
-    const filterDateInput = document.getElementById('filter-date-input');
+    const filterDateStart = document.getElementById('filter-date-start');
+    const filterDateEnd = document.getElementById('filter-date-end');
     const clearFilterBtn = document.getElementById('clear-filter-btn');
-
+    
     // Quick Paste Element
     const quickPasteInput = document.getElementById('quick-paste-input');
     const btnPasteClipboard = document.getElementById('btn-paste-clipboard');
@@ -748,12 +754,11 @@
     const editEmailContainer = document.getElementById('editEmailContainer');
     const editEmailField = document.getElementById('editEmailField');
     const editPasswordField = document.getElementById('editPasswordField');
-
     const editCancelBtn = document.getElementById('editCancelBtn');
     const editSaveBtn = document.getElementById('editSaveBtn');
 
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    
     async function main(){
       boardIdDisplay.textContent = appId;
       try{
@@ -764,7 +769,6 @@
     function listenForMessages(){
       if (messagesChannel) { sb.removeChannel(messagesChannel); }
       loadAndRender();
-      // ระบบ Realtime ของ Supabase: ทำงานครอบคลุมทั้งการโพสต์ใหม่, การแก้ไขอัปเดต และการลบ ทันทีบนทุกอุปกรณ์!
       messagesChannel = sb.channel('links-realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'links' }, () => { loadAndRender(); })
         .subscribe();
@@ -776,7 +780,6 @@
         .from('links')
         .select('id, title, url, created_at, is_pinned')
         .order('created_at', { ascending: false });
-      
       loadingState.style.display = 'none';
 
       if (error){ console.error("Error loading:", error); messagesContainer.innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้</p>`; return; }
@@ -789,7 +792,7 @@
         timestamp: { toDate: () => new Date(row.created_at) },
         created_at: row.created_at 
       }));
-
+      
       const emails = [];
       const messages = [];
 
@@ -799,11 +802,9 @@
               const parts = content.split(EMAIL_SEPARATOR);
               item.email = parts[0] || '';
               item.password = parts[1] || '';
-              // Index 2 used to be days, Index 3 is status. Kept compatible with old DB saves.
               item.status = parts.length > 3 ? parts[3] : (parts[2] && parts[2].length === 1 ? parts[2] : '0'); 
               emails.push(item);
           } else {
-              // Parse Link/Code Splitter
               if (item.rawUrl.includes('\n|||EXTRA|||\n')) {
                   const parts = item.rawUrl.split('\n|||EXTRA|||\n');
                   item.text = parts[0];
@@ -815,15 +816,14 @@
               messages.push(item);
           }
       });
-
-      // Sort messages by pin
+      
       messages.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;
         return 0;
       });
-
-      currentEmailsList = emails; // Store for filtering
+      
+      currentEmailsList = emails;
 
       renderMessages(messages);
       renderFilteredEmails();
@@ -833,7 +833,6 @@
 
     async function postMessage(text, title, extraText){
       if (!text.trim() && !extraText.trim()) return;
-      
       let finalUrl = text;
       if (extraText && extraText.trim()) {
           finalUrl = text + '\n|||EXTRA|||\n' + extraText.trim();
@@ -847,7 +846,6 @@
       }catch(error){ console.error("Error posting message:", error); alert("เกิดข้อผิดพลาดในการส่งข้อความ"); }
     }
 
-    // Removed `days` from parameters
     async function postEmail(title, email, password, status = '0') {
         if (!email.trim() || !password.trim()) return;
         let finalTitle = title.trim();
@@ -856,7 +854,6 @@
             finalTitle = `${d.getDate()}/${d.getMonth() + 1}`;
         }
 
-        // Add dummy '0' for days to keep backwards compatibility with index splitting
         const secureString = `${EMAIL_PREFIX}${email}${EMAIL_SEPARATOR}${password}${EMAIL_SEPARATOR}0${EMAIL_SEPARATOR}${status}`;
         try {
             const { error } = await sb.from('links').insert([{ title: finalTitle, url: secureString, is_pinned: false }]);
@@ -867,6 +864,20 @@
     }
 
     // --- RENDER FUNCTIONS ---
+    
+    // NEW: Check URL Function that handles www, shortlinks properly
+    function isLikelyUrl(str) {
+        if (str.includes(' ')) return false;
+        if (/^https?:\/\//i.test(str)) return true;
+        if (/^www\./i.test(str)) return true;
+        if (/^[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}(\/.*)?$/.test(str)) return true;
+        return false;
+    }
+    
+    function ensureHttp(str) {
+        if (/^https?:\/\//i.test(str)) return str;
+        return 'https://' + str;
+    }
 
     function renderMessages(messages){
       messagesContainer.innerHTML='';
@@ -874,9 +885,11 @@
       messages.forEach(msg => { messagesContainer.appendChild(createMessageElement(msg)); });
     }
 
+    // UPDATED: Date Range Filter Rendering
     function renderFilteredEmails() {
         const searchTerm = searchEmailInput.value.toLowerCase();
-        const dateTerm = filterDateInput.value;
+        const startDateTerm = filterDateStart.value;
+        const endDateTerm = filterDateEnd.value;
 
         const filtered = currentEmailsList.filter(mail => {
             const titleMatch = mail.title.toLowerCase().includes(searchTerm);
@@ -884,31 +897,56 @@
             const matchesSearch = titleMatch || emailMatch;
 
             let matchesDate = true;
-            if (dateTerm) {
-                // Parse created_at to YYYY-MM-DD
-                const mailDate = new Date(mail.created_at).toLocaleDateString('en-CA'); // Gets YYYY-MM-DD format
-                matchesDate = (mailDate === dateTerm);
-            }
+            const mailDate = new Date(mail.created_at).toLocaleDateString('en-CA'); 
+            
+            if (startDateTerm && mailDate < startDateTerm) matchesDate = false;
+            if (endDateTerm && mailDate > endDateTerm) matchesDate = false;
 
             return matchesSearch && matchesDate;
         });
-
+        
         emailsContainer.innerHTML = '';
         if (filtered.length === 0) { 
-            emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ไม่พบอีเมลที่ค้นหา</p>`; 
+            emailsContainer.innerHTML = `<p class="col-span-1 md:col-span-2 text-center text-gray-400">ไม่พบอีเมลที่ค้นหา หรือ ไม่มีในช่วงวันที่เลือก</p>`;
             return;
         }
         filtered.forEach(mail => { emailsContainer.appendChild(createEmailCard(mail)); });
     }
 
-    // Add Filter Listeners
+    // Filter Listeners
     searchEmailInput.addEventListener('input', renderFilteredEmails);
-    filterDateInput.addEventListener('change', renderFilteredEmails);
+    filterDateStart.addEventListener('change', renderFilteredEmails);
+    filterDateEnd.addEventListener('change', renderFilteredEmails);
     clearFilterBtn.addEventListener('click', () => {
         searchEmailInput.value = '';
-        filterDateInput.value = '';
+        filterDateStart.value = '';
+        filterDateEnd.value = '';
         renderFilteredEmails();
     });
+    
+    // --- BOARD PASTE BUTTON LOGIC ---
+    if(btnPasteBoardExtra) {
+        btnPasteBoardExtra.addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (!text) { showToast('Clipboard ว่างเปล่า'); return; }
+                
+                // แยกด้วย การเว้นวรรค, ลูกน้ำ หรือขึ้นบรรทัดใหม่
+                const splitText = text.split(/[\s,]+/).filter(item => item.trim() !== '').join('\n');
+                
+                const existingText = extraLinksInput.value.trim();
+                if (existingText) {
+                    extraLinksInput.value = existingText + '\n' + splitText;
+                } else {
+                    extraLinksInput.value = splitText;
+                }
+                showToast('วางและแยกบรรทัดให้อัตโนมัติแล้ว!');
+            } catch(err) {
+                console.error('Failed to read clipboard', err);
+                alert('เบราว์เซอร์ไม่อนุญาตให้ดึงข้อมูล กรุณากด Ctrl+V วางเองในช่องครับ');
+            }
+        });
+    }
 
     // --- CARD CREATION ---
 
@@ -918,20 +956,21 @@
       let content = '';
       if (msg.title && msg.title.trim()){ content += `<div class="font-bold text-lg tracking-wide" style="color:#93c5fd">${escapeHTML(msg.title)}</div>`; }
       
-      // Main Message
       if (msg.text && msg.text.trim()) {
          content += `<p class="text-cyan-100 whitespace-pre-wrap flex-1 text-base">${escapeHTML(msg.text)}</p>`;
       }
 
-      // Extra Links / Codes Processing
+      // Extra Links / Codes Processing (UPDATED LOGIC)
       if (msg.extra && msg.extra.trim()) {
           const lines = msg.extra.split('\n').filter(l => l.trim() !== '');
           if (lines.length > 0) {
               content += `<div class="flex flex-col gap-2 mt-2 pt-3 border-t border-cyan-800/30">`;
               lines.forEach(line => {
                   const trimmed = line.trim();
-                  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-                      content += `<a href="${trimmed}" target="_blank" class="btn btn-secondary py-2 px-4 text-sm inline-flex justify-center md:justify-start w-full md:w-auto shadow-md hover:scale-[1.02] transition-transform">🔗 กดเปิดลิ้งค์: <span class="truncate max-w-[200px] ml-2 font-normal">${escapeHTML(trimmed)}</span></a>`;
+                  
+                  if (isLikelyUrl(trimmed)) {
+                      const safeUrl = ensureHttp(trimmed);
+                      content += `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary py-2 px-4 text-sm inline-flex justify-center md:justify-start w-full md:w-auto shadow-md hover:scale-[1.02] transition-transform" style="text-decoration: none;">🔗 กดเปิดลิ้งค์: <span class="truncate max-w-[200px] ml-2 font-normal">${escapeHTML(trimmed)}</span></a>`;
                   } else {
                       const safeCode = escapeHTML(trimmed);
                       content += `<button class="btn btn-primary btn-copy-extra py-2 px-4 text-sm inline-flex justify-center md:justify-start w-full md:w-auto shadow-md hover:scale-[1.02] transition-transform" data-code="${safeCode}">📋 คัดลอกโค้ด: <span class="font-mono ml-2 font-normal">${safeCode}</span></button>`;
@@ -951,20 +990,16 @@
           <button class="delete-button btn btn-danger py-1 px-3 rounded-full text-sm">🗑️ ลบ</button>
         </div>
       </div>`;
-      
       div.innerHTML = content;
       
-      // Handlers
       const copyBtn = div.querySelector('.copy-button');
       if(copyBtn) {
          copyBtn.onclick = (e) => { copyTextToClipboard(msg.text, e.target); };
       }
       
-      // Extra copy buttons
       div.querySelectorAll('.btn-copy-extra').forEach(btn => {
           btn.onclick = (e) => { copyTextToClipboard(btn.dataset.code, e.currentTarget); };
       });
-
       div.querySelector('.pin-button').onclick = () => { togglePinMessage(msg.id); };
       div.querySelector('.delete-button').onclick = () => { openDeleteModal(msg.id); };
       div.querySelector('.edit-button').onclick = () => { openEditModal(msg.id, msg.title, msg.text, false, '', '', '0', msg.extra); };
@@ -978,7 +1013,6 @@
         let statusClass = '';
         let statusText = '';
         let statusIcon = '❌';
-
         if (data.status === '2') {
             statusClass = 'email-status-good';
             statusText = 'ใช้งานแล้ว ✅';
@@ -993,7 +1027,6 @@
             statusIcon = '❌';
         }
 
-        // Apply classes
         div.className = `p-5 rounded-xl flex flex-col gap-3 gradient-border email-card transition-transform duration-300 hover:scale-[1.01] ${statusClass}`;
         div.innerHTML = `
             <div class="flex justify-between items-start mb-1">
@@ -1029,10 +1062,8 @@
                 บันทึกเมื่อ: ${createdDate.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' })}
             </div>
         `;
-        // Handlers
         const passMask = div.querySelector('.password-mask');
         const passText = div.querySelector('.password-text');
-        
         div.querySelector('.toggle-pass').onclick = (e) => {
             passMask.classList.toggle('hidden');
             passText.classList.toggle('hidden');
@@ -1043,12 +1074,10 @@
         div.querySelector('.copy-pass').onclick = (e) => copyTextToClipboard(data.password, e.target);
         div.querySelector('.del-btn').onclick = () => openDeleteModal(data.id);
         
-        // Expiry removed, pass '0' for days
         div.querySelector('.edit-btn').onclick = () => openEditModal(data.id, data.title, null, true, data.email, data.password, data.status, '');
         
-        // Quick Status Change Handler
         div.querySelector('.quick-status-btn').onclick = async (e) => {
-            const statusOrder = ['0', '1', '2']; // ❌ -> ⏱️ -> ✅
+            const statusOrder = ['0', '1', '2'];
             let currentIndex = statusOrder.indexOf(data.status);
             if (currentIndex === -1) currentIndex = 0;
             const nextStatus = statusOrder[(currentIndex + 1) % statusOrder.length];
@@ -1100,7 +1129,7 @@
             }
         }
     };
-
+    
     // --- EDIT LOGIC ---
 
     function openEditModal(id, currentTitle, currentText, isEmail = false, emailVal = '', passVal = '', currentStatus = '0', extraText = '') {
@@ -1226,7 +1255,6 @@
         e.preventDefault(); 
         postMessage(messageInput.value, titleInput.value, extraLinksInput.value); 
     });
-    
     emailForm.addEventListener('submit', (e) => { 
         e.preventDefault(); 
         const selectedStatus = document.querySelector('input[name="email-status"]:checked');
@@ -1256,7 +1284,6 @@
         navigator.clipboard.writeText(text).then(() => { 
             showToast(); 
             if (button && button.tagName === 'BUTTON'){ 
-                // Store original HTML instead of just text to preserve emojis
                 const oldHTML = button.innerHTML;
                 button.innerHTML = '✅ สำเร็จ!'; 
                 setTimeout(() => { button.innerHTML = oldHTML; }, 2000); 
